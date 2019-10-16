@@ -14,8 +14,8 @@ public:
 
     TPoint& operator = (const TPoint& inOther); // Оператор копирования
 
-    bool operator == (const TPoint& inOther); // Оператор равенства
-    bool operator != (const TPoint& inOther); // Оператор неравенства
+    bool operator == (const TPoint& inOther) const; // Оператор равенства
+    bool operator != (const TPoint& inOther) const ; // Оператор неравенства
 
     void setX(const std::int32_t inX); // Метод задаст Х
     void setY(const std::int32_t inY); // Метод задаст Y

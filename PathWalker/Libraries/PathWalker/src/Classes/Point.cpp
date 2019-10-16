@@ -48,7 +48,7 @@ TPoint& TPoint::operator = (const TPoint& inOther)
  * @param inOther - Сравниваемый объект
  * @return Вернёт признак равенства
  */
-bool TPoint::operator == (const TPoint& inOther)
+bool TPoint::operator == (const TPoint& inOther) const
 { return (fX == inOther.fX) && (fY == inOther.fY); }
 //-----------------------------------------------------------------------------
 /**
@@ -56,7 +56,7 @@ bool TPoint::operator == (const TPoint& inOther)
  * @param inOther - Сравниваемый объект
  * @return Вернёт признак неравенства
  */
-bool TPoint::operator != (const TPoint& inOther)
+bool TPoint::operator != (const TPoint& inOther) const
 { return !(*this == inOther); }
 //-----------------------------------------------------------------------------
 /**

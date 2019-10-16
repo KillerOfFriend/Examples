@@ -1,9 +1,18 @@
 #include <iostream>
 
-using namespace std;
+#include "PathWalker.h"
 
 int main()
 {
-    cout << "Hello World!" << endl;
+    TString Path;
+    TPathWalker PathWalker(Path);
+
+    if (!PathWalker.isValid())
+        std::cout << "Не удалось считать файл лаберинта!" << std::endl;
+    else
+    {
+
+    }
+
     return 0;
 }
