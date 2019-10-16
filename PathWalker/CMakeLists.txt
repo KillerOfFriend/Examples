@@ -1,9 +1,11 @@
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 set(PRJ_NAME ProjectPathWalker)
 project(${PRJ_NAME})
 
 add_definitions(-std=c++11)
 
+set(PROJECT_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+
 add_subdirectory(Libraries)
-#add_subdirectory(Modules)
+add_subdirectory(Modules)
