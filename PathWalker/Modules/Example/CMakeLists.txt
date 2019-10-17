@@ -21,5 +21,5 @@ file(GLOB_RECURSE SRC_CPP
     ${SELF_SOURCE_PATH}/*.c
     ${SELF_SOURCE_PATH}/*.cpp)
 
-add_executable(${PROJECT_NAME} WIN32 ${SRC_H} ${SRC_CPP}) # Создаём исполняемый файл
+add_executable(${PROJECT_NAME} ${SRC_H} ${SRC_CPP}) # Создаём исполняемый файл
 target_link_libraries(${PROJECT_NAME} PathWalker) # Линкуем библиотеки

@@ -1,5 +1,5 @@
 #ifdef _WIN32
-#    ifndef PATHWALKER_EXPORTS
+#    if defined(PATHWALKER_EXPORTS)
 #        define PATHWALKER_LIB __declspec(dllexport)
 #    else
 #        define PATHWALKER_LIB __declspec(dllimport)

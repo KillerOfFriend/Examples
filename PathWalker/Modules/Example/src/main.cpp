@@ -2,7 +2,7 @@
 
 #include "PathWalker.h"
 
-int main()
+int main(int argc, char *argv[])
 {
     TString Path;
     TPathWalker PathWalker(Path);
