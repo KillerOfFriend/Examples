@@ -87,3 +87,9 @@ std::int32_t TPoint::x() const
 std::int32_t TPoint::y() const
 { return fY; }
 //-----------------------------------------------------------------------------
+std::ostream &operator << (std::ostream& outStream, const TPoint& inPoint)
+{
+    outStream << "(" << inPoint.fX << ", " << inPoint.fY << ")";
+    return outStream;
+}
+//-----------------------------------------------------------------------------

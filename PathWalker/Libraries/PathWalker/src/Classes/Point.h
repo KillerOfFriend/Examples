@@ -2,6 +2,7 @@
 #define POINT_H
 
 #include <cstdint>
+#include <iostream>
 
 #include "PathWalker_glob.h"
 
@@ -26,6 +27,8 @@ public:
 private:
     std::int32_t fX = 0;
     std::int32_t fY = 0;
+
+    friend std::ostream &operator << (std::ostream&, const TPoint&);
 
 };
 
