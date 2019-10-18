@@ -1,5 +1,7 @@
 #include "Point.h"
 
+using namespace PathWalker;
+
 //-----------------------------------------------------------------------------
 TPoint::TPoint()
 {
@@ -87,9 +89,12 @@ std::int32_t TPoint::x() const
 std::int32_t TPoint::y() const
 { return fY; }
 //-----------------------------------------------------------------------------
-std::ostream &operator << (std::ostream& outStream, const TPoint& inPoint)
+namespace PathWalker
 {
-    outStream << "(" << inPoint.fX << ", " << inPoint.fY << ")";
-    return outStream;
+    std::ostream &operator << (std::ostream& outStream, const TPoint& inPoint)
+    {
+        outStream << "(" << inPoint.fX << ", " << inPoint.fY << ")";
+        return outStream;
+    }
 }
 //-----------------------------------------------------------------------------

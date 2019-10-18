@@ -12,32 +12,33 @@
 
 #include "PathWalker_glob.h"
 
-
-
-/**
- * @brief The TPathFinder class Класс,описывающий библиотеку перемещения в лаберинте
- */
-class PATHWALKER_LIB TPathWalker
+namespace PathWalker
 {
-public:
-    TPathWalker(const TString inLabyrinthPath); // Инициализирующий конструктор
+    /**
+     * @brief The TPathFinder class Класс,описывающий библиотеку перемещения в лаберинте
+     */
+    class PATHWALKER_LIB TPathWalker
+    {
+    public:
+        TPathWalker(const TString inLabyrinthPath); // Инициализирующий конструктор
 
-    bool isValid() const; // Метод вернёт флаг валидности лабиринта
-    std::error_code lastError() const; // Метод вернёт код последней ошибки
+        bool isValid() const; // Метод вернёт флаг валидности лабиринта
+        std::error_code lastError() const; // Метод вернёт код последней ошибки
 
-    bool walkThePath(const TPosition inStartPos, const std::string inPath); // Метод пройт по указанному пути
-    const TCurrentPos& walkResult() const; // Метод вернёт ссылку на класс, хранящий результат
+        bool walkThePath(const TPosition inStartPos, const std::string inPath); // Метод пройт по указанному пути
+        const TCurrentPos& walkResult() const; // Метод вернёт ссылку на класс, хранящий результат
 
-private:
-    std::error_code fLastError; // Код последней ошибки
-    std::list<TCell> fLabyrinth; // Контейнер, описывающий секции лабиринта
+    private:
+        std::error_code fLastError; // Код последней ошибки
+        std::list<TCell> fLabyrinth; // Контейнер, описывающий секции лабиринта
 
-    TCurrentPos fCurrentPos; // Инициализируем позицию
+        TCurrentPos fCurrentPos; // Инициализируем позицию
 
-    bool loadLabyrinth(const TString inLabyrinthPath); // Метод считает данные о лабиринте
-    bool containCell(const TCell inCell) const; // Метод проверит существование ячейки лабиринта
-    bool checkPathFormat(const std::string inPath) const; // Метод проверит формат пути
+        bool loadLabyrinth(const TString inLabyrinthPath); // Метод считает данные о лабиринте
+        bool containCell(const TCell inCell) const; // Метод проверит существование ячейки лабиринта
+        bool checkPathFormat(const std::string inPath) const; // Метод проверит формат пути
 
-};
+    };
+}
 
 #endif // PATHWALKER_H

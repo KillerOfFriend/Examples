@@ -2,8 +2,11 @@
 
 #include <iostream>
 #include <algorithm>
+#include <ctype.h>
 
 #include "errors.h"
+
+using namespace PathWalker;
 
 //-----------------------------------------------------------------------------
 /**
@@ -65,8 +68,8 @@ bool TPathWalker::walkThePath(const TPosition inStartPos, const std::string inPa
 
                 std::for_each(inPath.cbegin(), inPath.cend(), [this](const char & Char) // Проходим маршрут
                 {
-                    if (containCell(fCurrentPos.neighbore(static_cast<eMoveDirection>(std::toupper(Char))))) // Если в лабиринте есть соседняя секция
-                        fCurrentPos.move(static_cast<eMoveDirection>(std::toupper(Char))); // Перемещаемся в неё
+                    if (containCell(fCurrentPos.neighbore(static_cast<eMoveDirection>(toupper(Char))))) // Если в лабиринте есть соседняя секция
+                        fCurrentPos.move(static_cast<eMoveDirection>(toupper(Char))); // Перемещаемся в неё
                 });
             }
         }
@@ -152,7 +155,7 @@ bool TPathWalker::checkPathFormat(const std::string inPath) const
 
         auto Res = std::find_if(inPath.cbegin(), inPath.cend(), [&LegalPathChar](const char & Char) // Ищим невалидный символ
         {
-            return LegalPathChar.find(static_cast<eMoveDirection>(std::toupper(Char))) == LegalPathChar.end();
+            return LegalPathChar.find(static_cast<eMoveDirection>(toupper(Char))) == LegalPathChar.end();
         });
 
        Result = (Res == inPath.end()); // Если лишних символов не обнаружено, то валиден

@@ -5,17 +5,23 @@
 
 #include "PathWalker_glob.h"
 
-class PATHWALKER_LIB TErrorCategory : public std::error_category
+namespace PathWalker
 {
-public:
-    TErrorCategory(const char* inName, const std::string inMessage);
+    /**
+     * @brief The TErrorCategory class - Класс, описывающий категорию ошибки
+     */
+    class PATHWALKER_LIB TErrorCategory : public std::error_category
+    {
+    public:
+        TErrorCategory(const char* inName, const std::string inMessage);
 
-    virtual const char* name() const noexcept override;
-    virtual std::string message(int) const override;
+        virtual const char* name() const noexcept override;
+        virtual std::string message(int) const override;
 
-private:
-    const char* fName;
-    std::string fMessage;
-};
+    private:
+        const char* fName;
+        std::string fMessage;
+    };
+}
 
 #endif // ERRORCATEGORY_H

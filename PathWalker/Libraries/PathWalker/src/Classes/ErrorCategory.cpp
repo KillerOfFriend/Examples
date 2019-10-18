@@ -1,5 +1,7 @@
 #include "ErrorCategory.h"
 
+using namespace PathWalker;
+
 //-----------------------------------------------------------------------------
 TErrorCategory::TErrorCategory(const char* inName, const std::string inMessage) : fName(inName)
 {

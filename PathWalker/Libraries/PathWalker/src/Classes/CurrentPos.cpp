@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+using namespace PathWalker;
+
 //-----------------------------------------------------------------------------
 /**
  * @brief TCurrentPos::TCurrentPos - Конструктор по умолчанию
