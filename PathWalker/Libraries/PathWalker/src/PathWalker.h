@@ -10,6 +10,9 @@
 #include "PathWalkerTypes.h"
 #include "Classes/CurrentPos.h"
 
+#include <experimental/filesystem>
+namespace filesystem = std::experimental::filesystem;
+
 #include "PathWalker_glob.h"
 
 namespace PathWalker
@@ -20,7 +23,7 @@ namespace PathWalker
     class PATHWALKER_LIB TPathWalker
     {
     public:
-        TPathWalker(const TString inLabyrinthPath); // Инициализирующий конструктор
+        TPathWalker(const filesystem::path inLabyrinthPath); // Инициализирующий конструктор
 
         bool isValid() const; // Метод вернёт флаг валидности лабиринта
         std::error_code lastError() const; // Метод вернёт код последней ошибки
@@ -34,7 +37,7 @@ namespace PathWalker
 
         TCurrentPos fCurrentPos; // Инициализируем позицию
 
-        bool loadLabyrinth(const TString inLabyrinthPath); // Метод считает данные о лабиринте
+        bool loadLabyrinth(const filesystem::path inLabyrinthPath); // Метод считает данные о лабиринте
         bool containCell(const TCell inCell) const; // Метод проверит существование ячейки лабиринта
         bool checkPathFormat(const std::string inPath) const; // Метод проверит формат пути
 

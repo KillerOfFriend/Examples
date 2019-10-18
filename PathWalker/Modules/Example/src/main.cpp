@@ -5,7 +5,9 @@
 
 int main(int argc, char *argv[])
 {
-    TString LabyrinthPath;
+    ENCODINGSETUP(CP_UTF8);
+
+    filesystem::path LabyrinthPath;
     PathWalker::TPathWalker PathWalker(LabyrinthPath);
 
     if (!PathWalker.isValid())
@@ -13,9 +15,11 @@ int main(int argc, char *argv[])
     else
     {
         std::string Path = "lrud";
-        PathWalker::TCell Start(0,0);
+        PathWalker::TCell StartCell(0,0);
 
-        if (!PathWalker.walkThePath(Start, Path)) // При прохождении произошла ошибка
+        std::cout << "Запускаем поиск по маршруту:" << Path << std::endl;
+
+        if (!PathWalker.walkThePath(StartCell, Path)) // При прохождении произошла ошибка
             std::cout << "Ошибка! Не удалось пройти оп заданному пути:" << PathWalker.lastError().message() << std::endl;
         else // Маршрут успешно пройден
         {

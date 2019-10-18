@@ -13,7 +13,7 @@ using namespace PathWalker;
  * @brief TPathWalker::TPathWalker - Инициализирующий конструктор
  * @param inLabyrinthPath - Путь к файлу с описанием лабиринта
  */
-TPathWalker::TPathWalker(const TString inLabyrinthPath)
+TPathWalker::TPathWalker(const filesystem::path inLabyrinthPath)
 {
     if (!loadLabyrinth(inLabyrinthPath))
     {
@@ -92,7 +92,7 @@ const TCurrentPos& TPathWalker::walkResult() const
  * @param inLabyrinthPath - Путь к файлу с описанием лабиринта
  * @return Вернёт признак успешности операции
  */
-bool TPathWalker::loadLabyrinth(const TString inLabyrinthPath)
+bool TPathWalker::loadLabyrinth(const filesystem::path inLabyrinthPath)
 {
     fLastError.clear();
 
