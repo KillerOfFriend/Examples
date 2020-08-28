@@ -3,5 +3,6 @@
 build-*
 # Запрещаем комит собраных проектов
 PathWalker/Build/
-# Запрещаем файл конфигов сборки
-PathWalker/CMakeLists\.txt\.user
+STC1/build/
+
+*.user

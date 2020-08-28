@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>506</width>
+    <height>383</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTableView" name="tableView">
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>506</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="mmImport">
+    <property name="title">
+     <string>Импорт</string>
+    </property>
+    <addaction name="actionImportXml"/>
+    <addaction name="actionImportDB"/>
+   </widget>
+   <widget class="QMenu" name="mmEdit">
+    <property name="title">
+     <string>Редактирование</string>
+    </property>
+    <addaction name="actionClearTable"/>
+   </widget>
+   <addaction name="mmImport"/>
+   <addaction name="mmEdit"/>
+  </widget>
+  <action name="actionClearTable">
+   <property name="text">
+    <string>Очистить таблицу</string>
+   </property>
+   <property name="toolTip">
+    <string>Очистить таблицу</string>
+   </property>
+  </action>
+  <action name="actionImportXml">
+   <property name="text">
+    <string>Импортировать из XML</string>
+   </property>
+   <property name="toolTip">
+    <string>Импортировать из XML</string>
+   </property>
+  </action>
+  <action name="actionImportDB">
+   <property name="text">
+    <string>Импортировать из БД</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
