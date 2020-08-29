@@ -2,9 +2,10 @@
 set(PROJECT_NAME STC1)
 project(${PROJECT_NAME})
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON) # Разрешаем работу с собственной папкой
-set(CMAKE_AUTOMOC ON) # Разрешаем CMake  автоматический запуск moc при необходимости
-set(CMAKE_AUTOUIC ON) # Требуем создание кода из списка файлов Qt-дизайнера ui
+set(CMAKE_INCLUDE_CURRENT_DIR ON)   # Разрешаем работу с собственной папкой
+set(CMAKE_AUTOMOC ON)               # Разрешаем CMake  автоматический запуск moc при необходимости
+set(CMAKE_AUTOUIC ON)               # Требуем создание кода из списка файлов Qt-дизайнера ui
+set(CMAKE_CXX_STANDARD 17)          # Задаём стандарт
 
 set(BUILD_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build/${CMAKE_BUILD_TYPE})   # Путь к папке сборки
 set(EXECUTABLE_OUTPUT_PATH ${BUILD_PATH})                               # Указываем путь к папке сборки бинарей

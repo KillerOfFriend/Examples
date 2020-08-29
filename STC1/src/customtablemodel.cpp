@@ -105,8 +105,6 @@ bool CustomTableModel::setData(const QModelIndex &index, const QVariant &value, 
 
             default: { Result = false; break; }
         } // switch (role)
-
-        Result = mDataSource->setData(index.row(), static_cast<CustomColumns>(index.column()), value);
     }
 
     return Result;
