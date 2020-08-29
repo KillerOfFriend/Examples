@@ -105,7 +105,12 @@ QVariant CustomTableModel::headerData(int section, Qt::Orientation orientation, 
 //-----------------------------------------------------------------------------
 Qt::ItemFlags CustomTableModel::flags(const QModelIndex &index) const
 {
-    return QAbstractTableModel::flags(index) | Qt::ItemFlag::ItemIsEditable;
+    Qt::ItemFlags Result = QAbstractTableModel::flags(index);
+
+    if (index.column() != CustomColumns::ccID) // Запрещаем редактировать идентификатор
+        Result |= Qt::ItemFlag::ItemIsEditable;
+
+    return Result;
 }
 //-----------------------------------------------------------------------------
 

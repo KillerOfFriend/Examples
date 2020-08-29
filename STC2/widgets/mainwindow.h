@@ -5,8 +5,8 @@
 
 #include <QMenu>
 #include <QMainWindow>
-#include <QSqlDatabase>
 
+#include "sqlite.h"
 #include "datastorege.h"
 
 //-----------------------------------------------------------------------------
@@ -41,11 +41,8 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    SqLite mDb; ///< База данных
     std::shared_ptr<DataStorege> mDataStorege = nullptr; ///< Хранилище данных
-
-    const QString mDbFileName = "SqLite"; ///< Имя файла БД
-    const QString mDbConnectionName = "STC2"; ///< Имя соединения БД
-
     eAppRole mAppRole = eAppRole::arNone; ///< Роль приложения
 
     /**
@@ -73,36 +70,9 @@ private:
 
 
 
-    /**
-     * @brief getDataBaseConnection - Метод вернёт соединение с БД
-     * @return Вернёт соединение с БД
-     */
-    QSqlDatabase getDataBaseConnection() const;
 
-    /**
-     * @brief createDbTable - Метод создасть таблицу в БД
-     * @return Вернёт признак успешности операции
-     */
-    bool createDbTable() const;
 
-    /**
-     * @brief initDbTable - Метод инициализирует таблицу бд если необходимо
-     * @return Вернёт признак успешности операции
-     */
-    bool initDbTable() const;
 
-    /**
-     * @brief loadFromDB - Метод загрузит данные из БД
-     * @return Вернёт перечень загруженых данных
-     */
-    std::vector<CustomData> loadFromDB();
-
-    /**
-     * @brief saveToDB - Метод выгрузит данные в БД
-     * @param inData - Перечень выгружаемых данных
-     * @return Вернёт признак успешности операции
-     */
-    bool saveToDB(const std::vector<CustomData>& inData) const;
 
 public slots:
 
