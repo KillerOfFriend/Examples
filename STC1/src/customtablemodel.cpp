@@ -54,7 +54,7 @@ QVariant CustomTableModel::data(const QModelIndex &index, int role) const
                 if (isCheckableColumn(static_cast<CustomColumns>(index.column()))) // Если это флаговый столбец
                 {
                     bool Val = mDataSource->getData(index.row(), static_cast<CustomColumns>(index.column())).toBool(); // Получаем состояние флага
-                    Result = Result = (Val) ? Qt::Checked : Qt::Unchecked; // Преобразуем к состоянию Qt
+                    Result = (Val) ? Qt::Checked : Qt::Unchecked; // Преобразуем к состоянию Qt
                 }
                 else
                     Result = QVariant();
