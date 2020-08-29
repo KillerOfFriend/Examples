@@ -93,11 +93,13 @@ bool aThreadedDataSource::removeData(const std::size_t inRow)
         Result = true;
     }
 
-    return Result = false;
+    return Result;
 }
 //-----------------------------------------------------------------------------
 bool aThreadedDataSource::update()
 {
+    bool Result = false;
+
     if (!mIsReading) // Чтение не идёт
     {
         mIsReading = true;
@@ -106,11 +108,16 @@ bool aThreadedDataSource::update()
             mReadThread.join(); // Страхуемся
 
         mReadThread = std::thread(&aThreadedDataSource::startUpdateInThread, this); // Создаём поток
+        Result = mReadThread.joinable();
     }
+
+    return Result;
 }
 //-----------------------------------------------------------------------------
 bool aThreadedDataSource::upload()
 {
+    bool Result = false;
+
     if (!mIsWriteing) // Запись не идёт
     {
         mIsWriteing = true;
@@ -119,7 +126,10 @@ bool aThreadedDataSource::upload()
             mWriteThread.join(); // Страхуемся
 
         mWriteThread = std::thread(&aThreadedDataSource::startUploadInThread, this); // Создаём поток
+        Result = mReadThread.joinable();
     }
+
+    return Result;
 }
 //---------------------------------------------------------------------------
 void aThreadedDataSource::startUpdateInThread()
