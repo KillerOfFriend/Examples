@@ -19,10 +19,11 @@ NetWork::NetWork(const std::shared_ptr<DataStorege> inDataStorege, QObject *inPa
 void NetWork::read(QByteArray inData)
 {
     QDataStream Stream(&inData, QIODevice::ReadOnly);
+    quint64 Size;
     ePackageType Type;
 
+    Stream >> Size;
     Stream >> Type;
-    qDebug() << "Recieve: "  << inData.size();
 
     switch (Type)
     {

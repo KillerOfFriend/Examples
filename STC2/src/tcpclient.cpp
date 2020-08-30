@@ -46,15 +46,17 @@ void TcpClient::onInit(QByteArray inInitData)
 {
     QDataStream Stream(&inInitData, QIODevice::ReadOnly);
 
+    quint64 PackageSize;
     ePackageType Type;
-    quint64 Size;
+    quint64 DataSize;
 
+    Stream >> PackageSize;
     Stream >> Type;
-    Stream >> Size;
+    Stream >> DataSize;
 
     std::vector<CustomData> InitVals;
 
-    while (Size--)
+    while (DataSize--)
     {
         CustomData Data;
         Stream >> Data;
@@ -68,19 +70,53 @@ void TcpClient::onInit(QByteArray inInitData)
 
 
 //-----------------------------------------------------------------------------
-void TcpClient::write(const QByteArray inData)
+void TcpClient::write(QByteArray inData)
 {
     if (!mClientSocket.isOpen())
         return;
 
-    mClientSocket.write(inData);
+    quint64 Size = sizeof(Size) + inData.size();
+
+    // Формируем пакет (Размер пакета[8])(Данные[~])
+    QByteArray Package;
+    QDataStream Stream(&Package, QIODevice::WriteOnly);
+    Stream << Size;
+
+    Package += inData;
+    inData.clear();
+
+    do
+    {   // Обрабатываем возможность не полной отправки
+        quint64 Sended = mClientSocket.write(Package);
+        Package.remove(0, Sended);
+        Size -= Sended;
+
+    }
+    while(Size);
+
 }
 //-----------------------------------------------------------------------------
 void TcpClient::slot_onReadData()
 {
     if (mClientSocket.bytesAvailable())
     {
-        read(mClientSocket.readAll());
+        mAccumulator += mClientSocket.readAll(); // Получаем данные
+
+        if (mReadNewPackage) // Если начинаем чтение нового пакета
+        {
+            mReadNewPackage = false;
+            QDataStream Stream(&mAccumulator, QIODevice::ReadOnly);
+            Stream >> mPackageSize; // Получаем полный размер пакета
+        }
+
+        if (mAccumulator.size() >= mPackageSize) // Если покет получен целиком
+        {
+            read(mAccumulator.left(mPackageSize)); // Отправляем данные на обработку
+
+            mAccumulator.remove(0, mPackageSize); // Удаляем пакет из контейнера
+            mPackageSize = 0; // Сбрасываем размер пакета
+            mReadNewPackage = true; // Ожидаем нового пакета
+        }
     }
 }
 //-----------------------------------------------------------------------------

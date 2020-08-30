@@ -50,11 +50,15 @@ private:
 
     QTcpSocket mClientSocket;
 
+    bool mReadNewPackage = true;    ///< Флаг ожидания нового пакета
+    quint64 mPackageSize = 0;       ///< Размер пакета
+    QByteArray mAccumulator;        ///< Накопитель
+
     /**
      * @brief write - Метод отправит данные по сокету
      * @param inData - Отправляемые данные
      */
-    virtual void write(const QByteArray inData) override;
+    virtual void write(QByteArray inData) override;
 
 private slots:
 

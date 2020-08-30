@@ -49,14 +49,35 @@ void TcpServer::onInit(QByteArray inInitData)
     write(Data);
 }
 //-----------------------------------------------------------------------------
-void TcpServer::write(const QByteArray inData)
+void TcpServer::write(QByteArray inData)
 {
     if (!mServer.isListening())
         return;
 
     std::lock_guard<std::mutex> lg(mConnectionsDefender);
-    for (QTcpSocket* Connection : mConnections)
-        Connection->write(inData);
+    for (const std::pair<QTcpSocket*, std::shared_ptr<ConnectionData>>& Connection : mConnections)
+    {
+        quint64 Size = sizeof(Size) + inData.size();
+
+        // Формируем пакет (Размер пакета[8])(Данные[~])
+        QByteArray Package;
+        QDataStream Stream(&Package, QIODevice::WriteOnly);
+        Stream << Size;
+
+        Package += inData;
+
+        do
+        {   // Обрабатываем возможность не полной отправки
+            quint64 Sended = Connection.first->write(Package);
+            Package.remove(0, Sended);
+            Size -= Sended;
+
+        }
+        while(Size);
+
+    }
+
+    inData.clear();
 }
 //-----------------------------------------------------------------------------
 
@@ -75,7 +96,7 @@ void TcpServer::slot_onNewConnection()
     else
     {
         std::lock_guard<std::mutex> lg(mConnectionsDefender);
-        mConnections.insert(NewConnection);
+        mConnections.insert(std::make_pair(NewConnection, std::make_shared<ConnectionData>()));
 
         connect(NewConnection, &QTcpSocket::readyRead, this, &TcpServer::slot_onClientReadData); // Готовность к чтению данных
         connect(NewConnection, &QTcpSocket::disconnected, this, &TcpServer::slot_onClientDisconnect); // Отключение клиента
@@ -100,7 +121,37 @@ void TcpServer::slot_onClientReadData()
 
     if (Connection && Connection->bytesAvailable())
     {
-        read(Connection->readAll());
+        std::shared_ptr<ConnectionData> ConData = nullptr;
+
+        {
+            std::lock_guard<std::mutex> lg(mConnectionsDefender);
+
+            auto FindRes = mConnections.find(Connection);
+
+            if (FindRes != mConnections.end())
+                ConData = FindRes->second;
+        }
+
+        if (!ConData)
+            return;
+
+        ConData->mAccumulator += Connection->readAll(); // Получаем данные
+
+        if (ConData->mReadNewPackage) // Если начинаем чтение нового пакета
+        {
+            ConData->mReadNewPackage = false;
+            QDataStream Stream(&ConData->mAccumulator, QIODevice::ReadOnly);
+            Stream >> ConData->mPackageSize; // Получаем полный размер пакета
+        }
+
+        if (ConData->mAccumulator.size() >= ConData->mPackageSize) // Если покет получен целиком
+        {
+            read(ConData->mAccumulator.left(ConData->mPackageSize)); // Отправляем данные на обработку
+
+            ConData->mAccumulator.remove(0, ConData->mPackageSize); // Удаляем пакет из контейнера
+            ConData->mPackageSize = 0; // Сбрасываем размер пакета
+            ConData->mReadNewPackage = true; // Ожидаем нового пакета
+        }
     }
 }
 //-----------------------------------------------------------------------------

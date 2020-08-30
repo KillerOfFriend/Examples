@@ -58,7 +58,7 @@ protected:
      * @brief write - Метод отправит данные по сокету
      * @param inData - Отправляемые данные
      */
-    virtual void write(const QByteArray inData) = 0;
+    virtual void write(QByteArray inData) = 0;
 
     /**
      * @brief read - Метод примит данные из сокета

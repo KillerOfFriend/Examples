@@ -1,7 +1,7 @@
 #ifndef TCPSERVER_H
 #define TCPSERVER_H
 
-#include <set>
+#include <map>
 #include <mutex>
 
 #include "network.h"
@@ -9,6 +9,13 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 
+//-----------------------------------------------------------------------------
+struct ConnectionData
+{
+    bool mReadNewPackage = true;    ///< Флаг ожидания нового пакета
+    quint64 mPackageSize = 0;       ///< Размер пакета
+    QByteArray mAccumulator;        ///< Накопитель
+};
 //-----------------------------------------------------------------------------
 class TcpServer : public NetWork
 {
@@ -52,14 +59,14 @@ private:
     const quint16 mPort; ///< Порт хоста
 
     QTcpServer mServer; ///< Сервер
-    std::set<QTcpSocket*> mConnections; ///< Перечень соеденений
+    std::map<QTcpSocket*, std::shared_ptr<ConnectionData>> mConnections; ///< Перечень соеденений
     std::mutex mConnectionsDefender; ///< Мьютекс, защищающий соединения
 
     /**
      * @brief write - Метод отправит данные по сокету
      * @param inData - Отправляемые данные
      */
-    virtual void write(const QByteArray inData) override;
+    virtual void write(QByteArray inData) override;
 
 private slots:
 
