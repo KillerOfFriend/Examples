@@ -54,9 +54,10 @@ public:
      * @param inRow - Строка
      * @param inCol - Столбец
      * @param inData - Новые данные
+     * @param inUpdateModel - Флаг, вызывающий обновление модели после модификации данных (для сетевых модификаций)
      * @return Вернёт признак успешности операции
      */
-    bool setData(const quint64 inRow, const CustomColumns inCol, const QVariant& inData);
+    bool setData(const quint64 inRow, const CustomColumns inCol, const QVariant& inData, bool inUpdateModel = false);
 
     /**
      * @brief insertRow - Метод вставит пустую строку

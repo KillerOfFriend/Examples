@@ -4,5 +4,8 @@ build-*
 # Запрещаем комит собраных проектов
 PathWalker/Build/
 STC1/build/
+STC2/build/
 
 *.user
+
+

@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include <QDataStream>
+#include <QDebug>
 
 #include <tools.h>
 
@@ -21,6 +22,7 @@ void NetWork::read(QByteArray inData)
     ePackageType Type;
 
     Stream >> Type;
+    qDebug() << "Recieve: "  << inData.size();
 
     switch (Type)
     {
@@ -41,7 +43,7 @@ void NetWork::read(QByteArray inData)
             Stream >> Data;
 
             disconnectDataStorege();
-            mDataStorege->setData(Row, Col, Data);
+            mDataStorege->setData(Row, Col, Data, true);
             connectDataStorege();
 
             break;

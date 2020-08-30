@@ -43,7 +43,7 @@ QVariant DataStorege::getData(const quint64 inRow, const CustomColumns inCol) co
     return Result;
 }
 //-----------------------------------------------------------------------------
-bool DataStorege::setData(const quint64 inRow, const CustomColumns inCol, const QVariant& inData)
+bool DataStorege::setData(const quint64 inRow, const CustomColumns inCol, const QVariant& inData, bool inUpdateModel)
 {
     bool Result = false;
 
@@ -51,6 +51,9 @@ bool DataStorege::setData(const quint64 inRow, const CustomColumns inCol, const 
      {
          Result = true;
          std::lock_guard<std::mutex> lg(mDataDefender);
+
+         if (inUpdateModel)
+            sig_onStartRestart();
 
          switch (inCol)
          {
@@ -61,6 +64,9 @@ bool DataStorege::setData(const quint64 inRow, const CustomColumns inCol, const 
 
              default:                        { Result = false; break; }
          }
+
+         if (inUpdateModel)
+            sig_onEndRestart();
 
          if (Result)
             sig_onSetData(inRow, inCol, inData);
