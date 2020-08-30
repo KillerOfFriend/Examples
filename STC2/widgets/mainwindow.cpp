@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *inParent) :
     mDataStorege = std::make_shared<DataStorege>(); // Инициализируем источник данных
 
     initTable();
+    initContextMenu();
 }
 //-----------------------------------------------------------------------------
 MainWindow::~MainWindow()
@@ -37,7 +38,10 @@ bool MainWindow::initialize()
     mAppRole = selectAppRole();
 
     if (mDataStorege)
+    {
         ui->tableView->setModel(new CustomTableModel(mDataStorege));
+        connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::slot_onSelectionChanged);
+    }
 
     if (mAppRole == eAppRole::arNone)
     {
@@ -54,8 +58,18 @@ bool MainWindow::initialize()
 void MainWindow::initTable()
 {
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::ResizeToContents);
-
     ui->tableView->setItemDelegateForColumn(CustomColumns::ccCountry, new ComboBoxDelegate(this));
+    slot_onSelectionChanged({},{});
+}
+//-----------------------------------------------------------------------------
+void MainWindow::initContextMenu()
+{
+    mContextMenu.clear();
+
+    mContextMenu.addAction(ui->actionEdit);
+    mContextMenu.addAction(ui->actionAddRowBefore);
+    mContextMenu.addAction(ui->actionAddRowAfter);
+    mContextMenu.addAction(ui->actionRemoveRow);
 }
 //-----------------------------------------------------------------------------
 eAppRole MainWindow::selectAppRole()
@@ -114,5 +128,49 @@ void MainWindow::show()
 {
     if (mAppRole != eAppRole::arNone)
         QMainWindow::show();
+}
+//-----------------------------------------------------------------------------
+void MainWindow::slot_onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    Q_UNUSED(deselected);
+
+    ui->actionEdit->setEnabled(!selected.isEmpty());
+    ui->actionAddRowBefore->setEnabled(!selected.isEmpty());
+    ui->actionAddRowAfter->setEnabled(!selected.isEmpty());
+    ui->actionRemoveRow->setEnabled(!selected.isEmpty());
+}
+//-----------------------------------------------------------------------------
+void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
+{
+    if (ui->tableView->model() && ui->tableView->currentIndex().isValid())
+        mContextMenu.popup(ui->tableView->viewport()->mapToGlobal(pos));
+}
+//-----------------------------------------------------------------------------
+void MainWindow::on_actionEdit_triggered()
+{
+    QModelIndex Index = ui->tableView->currentIndex();
+    if (Index.isValid())
+        ui->tableView->edit(Index);
+}
+//-----------------------------------------------------------------------------
+void MainWindow::on_actionAddRowBefore_triggered()
+{
+    QModelIndex Index = ui->tableView->currentIndex();
+    if (Index.isValid())
+        ui->tableView->model()->insertRow(Index.row());
+}
+//-----------------------------------------------------------------------------
+void MainWindow::on_actionAddRowAfter_triggered()
+{
+    QModelIndex Index = ui->tableView->currentIndex();
+    if (Index.isValid())
+        ui->tableView->model()->insertRow(Index.row() + 1);
+}
+//-----------------------------------------------------------------------------
+void MainWindow::on_actionRemoveRow_triggered()
+{
+    QModelIndex Index = ui->tableView->currentIndex();
+    if (Index.isValid())
+        ui->tableView->model()->removeRows(Index.row(), 1);
 }
 //-----------------------------------------------------------------------------

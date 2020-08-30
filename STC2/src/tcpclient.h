@@ -58,7 +58,21 @@ private:
 
 private slots:
 
+    /**
+     * @brief slot_onReadData - Слот, реагирующий на получение данных
+     */
     void slot_onReadData();
+
+    /**
+     * @brief slot_onDisconnect - Слот, реагирующий на отключение клиента
+     */
+    void slot_onDisconnect();
+
+    /**
+     * @brief slot_onError - Слот, реагирующий на ошибку сокета
+     * @param inErr - Ошибка
+     */
+    void slot_onError(QAbstractSocket::SocketError inErr);
 
 };
 //-----------------------------------------------------------------------------

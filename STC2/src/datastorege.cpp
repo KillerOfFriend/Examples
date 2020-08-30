@@ -75,7 +75,7 @@ bool DataStorege::setData(const quint64 inRow, const CustomColumns inCol, const 
      return Result;
 }
 //-----------------------------------------------------------------------------
-bool DataStorege::insertRow(const quint64 inRow)
+bool DataStorege::insertRow(const quint64 inRow, bool inUpdateModel)
 {
     bool Result = false;
 
@@ -88,9 +88,28 @@ bool DataStorege::insertRow(const quint64 inRow)
         {
             std::lock_guard<std::mutex> lg(mDataDefender);
 
+            if (inUpdateModel)
+               sig_onStartRestart();
+
+            // Формируем данные с уникальным идентификатором
+            CustomData NewRowData;
+
+            if (mData.empty())
+                NewRowData.mID = 1;
+            else
+            {
+                auto FindRes = std::max_element(mData.cbegin(), mData.cend(), [](const CustomData& Item1, const CustomData& Item2)
+                { return Item1.mID < Item2.mID; });
+
+                 NewRowData.mID = FindRes->mID + 1;
+            }
+
             auto Pos = mData.begin();
             std::advance(Pos, inRow);
-            mData.insert(Pos, CustomData());
+            mData.insert(Pos, NewRowData);
+
+            if (inUpdateModel)
+               sig_onEndRestart();
         }
 
         sig_onInsertRow(inRow);
@@ -99,18 +118,26 @@ bool DataStorege::insertRow(const quint64 inRow)
     return Result;
 }
 //-----------------------------------------------------------------------------
-bool DataStorege::removeRow(const quint64 inRow)
+bool DataStorege::removeRow(const quint64 inRow, bool inUpdateModel)
 {
     bool Result = false;
 
     if (inRow < mData.size())
     {
+        Result = true;
+
         {
             std::lock_guard<std::mutex> lg(mDataDefender);
+
+            if (inUpdateModel)
+               sig_onStartRestart();
 
             auto Pos = mData.begin();
             std::advance(Pos, inRow);
             mData.erase(Pos);
+
+            if (inUpdateModel)
+               sig_onEndRestart();
         }
 
         sig_onRemoveRow(inRow);

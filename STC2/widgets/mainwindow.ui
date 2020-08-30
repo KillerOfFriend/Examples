@@ -24,6 +24,53 @@
     </item>
    </layout>
   </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionEdit"/>
+   <addaction name="actionAddRowBefore"/>
+   <addaction name="actionAddRowAfter"/>
+   <addaction name="actionRemoveRow"/>
+  </widget>
+  <action name="actionEdit">
+   <property name="text">
+    <string>Редактировать</string>
+   </property>
+   <property name="toolTip">
+    <string>Редактировать</string>
+   </property>
+  </action>
+  <action name="actionAddRowBefore">
+   <property name="text">
+    <string>Вставить строку до</string>
+   </property>
+   <property name="toolTip">
+    <string>Вставить строку до</string>
+   </property>
+  </action>
+  <action name="actionAddRowAfter">
+   <property name="text">
+    <string>Добавить строку после</string>
+   </property>
+   <property name="toolTip">
+    <string>Добавить строку после</string>
+   </property>
+  </action>
+  <action name="actionRemoveRow">
+   <property name="text">
+    <string>Удалить</string>
+   </property>
+   <property name="toolTip">
+    <string>Удалить</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

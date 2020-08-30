@@ -1,5 +1,7 @@
 #include "sqlite.h"
 
+#include <algorithm>
+
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
@@ -12,6 +14,88 @@ SqLite::SqLite(const QString inDbFileName, const QString inDbConnectionName)
       mDbConnectionName(inDbConnectionName)
 {
 
+}
+//-----------------------------------------------------------------------------
+std::vector<CustomData> SqLite::loadFromDB() const
+{
+    if (createDbTable())
+        initDbTable();
+
+    std::vector<CustomData> Result;
+    QSqlDatabase DB = getDataBaseConnection();
+
+    if (!DB.isOpen())
+        qDebug() << DB.lastError();
+    else
+    {
+        QSqlQuery Query(DB);
+
+        if (!Query.exec("SELECT * FROM CustomData"))
+            qDebug() << Query.lastError();
+        else
+        {
+            while (Query.next())
+            {
+                CustomData NewData;
+
+                NewData.mID = Query.value(cID).toUInt();
+                NewData.mName = Query.value(cName).toString();
+                NewData.mTelefon = Query.value(cPhone).toULongLong();
+                NewData.mCountryCode = static_cast<eCountry>(Query.value(cCounty).toInt());
+
+                Result.push_back(NewData);
+            }
+        }
+
+        DB.close();
+    }
+
+    return std::move(Result);
+}
+//-----------------------------------------------------------------------------
+bool SqLite::saveToDB(const std::vector<CustomData> &inData) const
+{
+    removeIfNead(inData);
+
+    bool Result = false;
+    QSqlDatabase DB = getDataBaseConnection();
+
+    if (!DB.isOpen())
+    {
+        Result = false;
+        qDebug() << DB.lastError();
+    }
+    else
+    {
+        QSqlQuery Query(DB);
+
+        for (const auto& Row : inData)
+        {
+            Query.prepare("INSERT OR REPLACE INTO CustomData ("
+                            "" + cID + ", "
+                            "" + cName + ", "
+                            "" + cPhone + ", "
+                            "" + cCounty + ""
+                            " ) VALUES ( "
+                            ":" + cID + ", "
+                            ":" + cName + ", "
+                            ":" + cPhone + ", "
+                            ":" + cCounty + " )");
+
+            Query.bindValue(":" + cID, Row.mID);
+            Query.bindValue(":" + cName, Row.mName);
+            Query.bindValue(":" + cPhone, Row.mTelefon);
+            Query.bindValue(":" + cCounty, Row.mCountryCode);
+
+            if (!Query.exec())
+                qDebug() << Query.lastError();
+        }
+
+        DB.close();
+        Result = true;
+    }
+
+    return Result;
 }
 //-----------------------------------------------------------------------------
 QSqlDatabase SqLite::getDataBaseConnection() const
@@ -114,83 +198,40 @@ bool SqLite::initDbTable() const
     return Result;
 }
 //-----------------------------------------------------------------------------
-std::vector<CustomData> SqLite::loadFromDB()
+void SqLite::removeIfNead(const std::vector<CustomData>& inData) const
 {
-    if (createDbTable())
-        initDbTable();
+    std::vector<CustomData> DbData = loadFromDB();
+    std::vector<CustomData> Res;
 
-    std::vector<CustomData> Result;
-    QSqlDatabase DB = getDataBaseConnection();
+    // Ищим разницу между состоянием бд и текущим датасетом
 
-    if (!DB.isOpen())
-        qDebug() << DB.lastError();
-    else
+    std::set_difference(DbData.cbegin(), DbData.cend(), inData.cbegin(), inData.cend(), std::back_inserter(Res), [](const CustomData& Item1, const CustomData& Item2)
     {
-        QSqlQuery Query(DB);
+        return Item1.mID < Item2.mID;
+    });
 
-        if (!Query.exec("SELECT * FROM CustomData"))
-            qDebug() << Query.lastError();
+    if (!Res.empty())
+    {
+        QSqlDatabase DB = getDataBaseConnection();
+
+        if (!DB.isOpen())
+            qDebug() << DB.lastError();
         else
         {
-            while (Query.next())
-            {
-                CustomData NewData;
+            QSqlQuery Query(DB);
 
-                NewData.mID = Query.value(cID).toUInt();
-                NewData.mName = Query.value(cName).toString();
-                NewData.mTelefon = Query.value(cPhone).toULongLong();
-                NewData.mCountryCode = static_cast<eCountry>(Query.value(cCounty).toInt());
+            QStringList Keys;
+            for (const CustomData& Item : Res)
+                Keys << QString::number(Item.mID);
 
-                Result.push_back(NewData);
-            }
-        }
-
-        DB.close();
-    }
-
-    return std::move(Result);
-}
-//-----------------------------------------------------------------------------
-bool SqLite::saveToDB(const std::vector<CustomData> &inData) const
-{
-    bool Result = false;
-    QSqlDatabase DB = getDataBaseConnection();
-
-    if (!DB.isOpen())
-    {
-        Result = false;
-        qDebug() << DB.lastError();
-    }
-    else
-    {
-        QSqlQuery Query(DB);
-
-        for (const auto& Row : inData)
-        {
-            Query.prepare("INSERT OR REPLACE INTO CustomData ("
-                            "" + cID + ", "
-                            "" + cName + ", "
-                            "" + cPhone + ", "
-                            "" + cCounty + ""
-                            " ) VALUES ( "
-                            ":" + cID + ", "
-                            ":" + cName + ", "
-                            ":" + cPhone + ", "
-                            ":" + cCounty + " )");
-
-            Query.bindValue(":" + cID, Row.mID);
-            Query.bindValue(":" + cName, Row.mName);
-            Query.bindValue(":" + cPhone, Row.mTelefon);
-            Query.bindValue(":" + cCounty, Row.mCountryCode);
+            Query.prepare("DELETE FROM CustomData WHERE " + cID + " IN ( :IDs )");
+            Query.bindValue(":keys", Keys.join(", "));
 
             if (!Query.exec())
                 qDebug() << Query.lastError();
+
+            DB.close();
         }
-
-        DB.close();
-        Result = true;
     }
-
-    return Result;
 }
 //-----------------------------------------------------------------------------

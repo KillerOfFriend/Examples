@@ -1,5 +1,7 @@
 #include "tcpclient.h"
 
+#include <QApplication>
+
 #include "tools.h"
 
 //-----------------------------------------------------------------------------
@@ -10,6 +12,7 @@ TcpClient::TcpClient(const QHostAddress inHostAddres, const quint16 inPort,
       mPort(inPort)
 {
     connect(&mClientSocket, &QTcpSocket::readyRead, this, &TcpClient::slot_onReadData);
+    connect(&mClientSocket, &QTcpSocket::disconnected, this, &TcpClient::slot_onDisconnect);
 }
 //-----------------------------------------------------------------------------
 TcpClient::~TcpClient()
@@ -79,5 +82,16 @@ void TcpClient::slot_onReadData()
     {
         read(mClientSocket.readAll());
     }
+}
+//-----------------------------------------------------------------------------
+void TcpClient::slot_onDisconnect()
+{
+    mClientSocket.close();
+    QApplication::closeAllWindows();
+}
+//-----------------------------------------------------------------------------
+void TcpClient::slot_onError(QAbstractSocket::SocketError inErr)
+{
+    qDebug() << "Socket Error: " << inErr;
 }
 //-----------------------------------------------------------------------------

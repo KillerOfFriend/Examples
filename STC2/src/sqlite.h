@@ -20,7 +20,7 @@ public:
      * @brief loadFromDB - Метод загрузит данные из БД
      * @return Вернёт перечень загруженых данных
      */
-    std::vector<CustomData> loadFromDB();
+    std::vector<CustomData> loadFromDB() const;
 
     /**
      * @brief saveToDB - Метод выгрузит данные в БД
@@ -51,6 +51,12 @@ private:
      * @return Вернёт признак успешности операции
      */
     bool initDbTable() const;
+
+    /**
+     * @brief removeIfNead - Метод удалит из бд удалённые записи
+     * @param inData - Текушее состояние датасета
+     */
+    void removeIfNead(const std::vector<CustomData>& inData) const;
 
 };
 //-----------------------------------------------------------------------------

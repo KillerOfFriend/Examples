@@ -80,6 +80,20 @@ bool CustomTableModel::setData(const QModelIndex &index, const QVariant &value, 
     return Result;
 }
 //-----------------------------------------------------------------------------
+bool CustomTableModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    bool Result = true;
+
+    beginInsertRows(parent, row, row + count - 1);
+
+    for (int RowIndex = row; RowIndex < row + count; ++RowIndex)
+        Result += mDataStorege->insertRow(RowIndex);
+
+    endInsertRows();
+
+    return Result;
+}
+//-----------------------------------------------------------------------------
 bool CustomTableModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     bool Result = true;

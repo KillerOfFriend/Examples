@@ -11,7 +11,7 @@ TcpServer::TcpServer(const QHostAddress inHostAddres, const quint16 inPort,
       mHostAddres(inHostAddres),
       mPort(inPort)
 {
-    connect(&mServer, &QTcpServer::newConnection, this, &TcpServer::slot_NewConnection);
+    connect(&mServer, &QTcpServer::newConnection, this, &TcpServer::slot_onNewConnection);
 }
 //-----------------------------------------------------------------------------
 TcpServer::~TcpServer()
@@ -62,23 +62,28 @@ void TcpServer::write(const QByteArray inData)
 
 
 //-----------------------------------------------------------------------------
-void TcpServer::slot_NewConnection()
+void TcpServer::slot_onNewConnection()
 {
     QTcpSocket* NewConnection = mServer.nextPendingConnection();
 
+    if (mConnections.size() >= mServer.maxPendingConnections())
+    {
+        NewConnection->disconnect();
+        NewConnection->close();
+        NewConnection->deleteLater();
+    }
+    else
     {
         std::lock_guard<std::mutex> lg(mConnectionsDefender);
         mConnections.insert(NewConnection);
+
+        connect(NewConnection, &QTcpSocket::readyRead, this, &TcpServer::slot_onClientReadData); // Готовность к чтению данных
+        connect(NewConnection, &QTcpSocket::disconnected, this, &TcpServer::slot_onClientDisconnect); // Отключение клиента
+        connect(NewConnection, QOverload<QTcpSocket::SocketError>::of(&QTcpSocket::error), this, &TcpServer::slot_onError); // Ошибка сокета клиента
     }
-
-    connect(NewConnection, &QTcpSocket::readyRead, this, &TcpServer::slot_ClientReadData); // Готовность к чтению данных
-    connect(NewConnection, &QTcpSocket::disconnected, this, &TcpServer::slot_ClientDisconnect); // Отключение клиента
-//    connect(NewConnection, &QAbstractSocket::stateChanged, this, &TcpServer::slot_ClientChangeState); // Изменение статуса клиента
-//    connect(NewConnection, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &TcpServer::slot_ClientError); // Ошибка сокета клиента
-
 }
 //-----------------------------------------------------------------------------
-void TcpServer::slot_ClientDisconnect()
+void TcpServer::slot_onClientDisconnect()
 {
     QTcpSocket* Connection = qobject_cast<QTcpSocket*>(QObject::sender());
 
@@ -89,7 +94,7 @@ void TcpServer::slot_ClientDisconnect()
     }
 }
 //-----------------------------------------------------------------------------
-void TcpServer::slot_ClientReadData()
+void TcpServer::slot_onClientReadData()
 {
     QTcpSocket* Connection = qobject_cast<QTcpSocket*>(QObject::sender());
 
@@ -97,5 +102,10 @@ void TcpServer::slot_ClientReadData()
     {
         read(Connection->readAll());
     }
+}
+//-----------------------------------------------------------------------------
+void TcpServer::slot_onError(QAbstractSocket::SocketError inErr)
+{
+    qDebug() << "Socket Error: " << inErr;
 }
 //-----------------------------------------------------------------------------

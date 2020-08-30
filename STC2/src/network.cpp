@@ -55,7 +55,7 @@ void NetWork::read(QByteArray inData)
             Stream >> Row;
 
             disconnectDataStorege();
-            mDataStorege->insertRow(Row);
+            mDataStorege->insertRow(Row, true);
             connectDataStorege();
 
             break;
@@ -67,7 +67,7 @@ void NetWork::read(QByteArray inData)
             Stream >> Row;
 
             disconnectDataStorege();
-            mDataStorege->removeRow(Row);
+            mDataStorege->removeRow(Row, true);
             connectDataStorege();
 
             break;

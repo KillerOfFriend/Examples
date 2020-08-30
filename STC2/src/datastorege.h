@@ -62,16 +62,18 @@ public:
     /**
      * @brief insertRow - Метод вставит пустую строку
      * @param inRow - Строка
+     * @param inUpdateModel - Флаг, вызывающий обновление модели после модификации данных (для сетевых модификаций)
      * @return Вернёт признак успешности операции
      */
-    bool insertRow(const quint64 inRow);
+    bool insertRow(const quint64 inRow, bool inUpdateModel = false);
 
     /**
      * @brief removeRow - Метод удалит строку
      * @param inRow - Строка
+     * @param inUpdateModel - Флаг, вызывающий обновление модели после модификации данных (для сетевых модификаций)
      * @return Вернёт признак успешности операции
      */
-    bool removeRow(const quint64 inRow);
+    bool removeRow(const quint64 inRow, bool inUpdateModel = false);
 
     /**
      * @brief dump - Метод вернёт копию сожержимого хранилища данных

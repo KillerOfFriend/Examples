@@ -5,6 +5,7 @@
 
 #include <QMenu>
 #include <QMainWindow>
+#include <QItemSelection>
 
 #include "sqlite.h"
 #include "datastorege.h"
@@ -45,12 +46,19 @@ private:
     SqLite mDb; ///< База данных
     std::shared_ptr<DataStorege> mDataStorege = nullptr; ///< Хранилище данных
     std::unique_ptr<NetWork> mNetWork = nullptr; ///< Сетевой функционал
+
     eAppRole mAppRole = eAppRole::arNone; ///< Роль приложения
+    QMenu mContextMenu; ///< Контекстное меню
 
     /**
      * @brief initTable - Метод инициализирует таблицу
      */
     void initTable();
+
+    /**
+     * @brief initContextMenu - Метод инициализирует контекстное меню
+     */
+    void initContextMenu();
 
     /**
      * @brief selectAppRole - Метод выберет текущую роль приложения
@@ -71,11 +79,6 @@ private:
     bool becomeClient();
 
 
-
-
-
-
-
 public slots:
 
     /**
@@ -83,6 +86,15 @@ public slots:
      */
     void show();
 
+private slots:
+
+    void slot_onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void on_tableView_customContextMenuRequested(const QPoint &pos);
+
+    void on_actionEdit_triggered();
+    void on_actionAddRowBefore_triggered();
+    void on_actionAddRowAfter_triggered();
+    void on_actionRemoveRow_triggered();
 };
 //-----------------------------------------------------------------------------
 

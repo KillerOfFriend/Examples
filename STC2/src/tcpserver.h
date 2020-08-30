@@ -64,19 +64,25 @@ private:
 private slots:
 
     /**
-     * @brief slot_NewConnection - Слот, реагирующий на подключение нового клиента
+     * @brief slot_onNewConnection - Слот, реагирующий на подключение нового клиента
      */
-    void slot_NewConnection();
+    void slot_onNewConnection();
 
     /**
-     * @brief slot_ClientDisconnect - Слот, реагирующий на отключение клиента
+     * @brief slot_onClientDisconnect - Слот, реагирующий на отключение клиента
      */
-    void slot_ClientDisconnect();
+    void slot_onClientDisconnect();
 
     /**
-     * @brief slot_ClientReadData - Слот, реагирующий на готовность к чтению данных от клиентов
+     * @brief slot_onClientReadData - Слот, реагирующий на готовность к чтению данных от клиентов
      */
-    void slot_ClientReadData();
+    void slot_onClientReadData();
+
+    /**
+     * @brief slot_onError - Слот, реагирующий на ошибку сокета
+     * @param inErr - Ошибка
+     */
+    void slot_onError(QAbstractSocket::SocketError inErr);
 
 
 };
