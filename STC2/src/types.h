@@ -2,6 +2,7 @@
 #define TYPES_H
 
 #include <QString>
+#include <QDataStream>
 
 //-----------------------------------------------------------------------------
 /**
@@ -17,7 +18,7 @@ enum eCountry
 /**
  * @brief The CustomColumns enum - Перечень столбцов
  */
-enum CustomColumns : quint8
+enum CustomColumns
 {
     ccID = 0,
     ccName = 1,

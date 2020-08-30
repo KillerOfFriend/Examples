@@ -25,16 +25,15 @@ public:
     DataStorege(QObject *inParent = nullptr);
 
     /**
-     * @brief DataStorege - Инициализирующий конструктор
-     * @param inData - Данные
-     * @param inParent - Родительский объект
-     */
-    DataStorege(const std::vector<CustomData>& inData, QObject *inParent = nullptr);
-
-    /**
      * @brief ~DataStorege - Деструктор по умолчанию
      */
     ~DataStorege() = default;
+
+    /**
+     * @brief init - Метод инициализирует данные
+     * @param inData - Новые данные
+     */
+    void init(const std::vector<CustomData>& inData);
 
     /**
      * @brief getRowCount - Метод вернёт количество строк
@@ -86,6 +85,8 @@ private:
 
 signals:
 
+    // Сигналы для сети
+
     /**
      * @brief sig_onSetData - Сигнал, возникающий при модификации данных строки
      * @param inRow - Строка
@@ -101,10 +102,22 @@ signals:
     void sig_onInsertRow(quint64 inRow);
 
     /**
-     * @brief sig_onRemoveRow - Сигна, возникающий при удалении строки
+     * @brief sig_onRemoveRow - Сигнал, возникающий при удалении строки
      * @param inRow - Строка
      */
     void sig_onRemoveRow(quint64 inRow);
+
+    // Сигналы для модели
+
+    /**
+     * @brief sigStartRestart - Сигнал, возникающий в начале обновления данных
+     */
+    void sig_onStartRestart();
+
+    /**
+     * @brief sigEndRestart - Сигнал, возникающий в конце обновления данных
+     */
+    void sig_onEndRestart();
 
 };
 //-----------------------------------------------------------------------------

@@ -19,3 +19,29 @@ QString tools::countryText(const eCountry inCountyCode)
     return Result;
 }
 //-----------------------------------------------------------------------------
+
+
+
+
+
+//-----------------------------------------------------------------------------
+QDataStream &operator << (QDataStream &outStream, const CustomData& Data)
+{
+    outStream << Data.mID;
+    outStream << Data.mName;
+    outStream << Data.mTelefon;
+    outStream << Data.mCountryCode;
+
+   return outStream;
+}
+//-----------------------------------------------------------------------------
+QDataStream &operator >> (QDataStream &inStream, CustomData& Data)
+{
+    inStream >> Data.mID;
+    inStream >> Data.mName;
+    inStream >> Data.mTelefon;
+    inStream >> Data.mCountryCode;
+
+   return inStream;
+}
+//-----------------------------------------------------------------------------

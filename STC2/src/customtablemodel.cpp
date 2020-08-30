@@ -15,6 +15,10 @@ CustomTableModel::CustomTableModel(const std::shared_ptr<DataStorege> inDataStor
 {
     assert(mDataStorege != nullptr);
     std::call_once(ColumnsArrayInit, CustomTableModel::initColumnsText); // Единажды инициализируем текст столбцов
+
+    // Обработка инициализации
+    connect(mDataStorege.get(), &DataStorege::sig_onStartRestart, this, &CustomTableModel::beginResetModel);
+    connect(mDataStorege.get(), &DataStorege::sig_onEndRestart, this, &CustomTableModel::endResetModel);
 }
 //-----------------------------------------------------------------------------
 int CustomTableModel::rowCount(const QModelIndex &parent) const

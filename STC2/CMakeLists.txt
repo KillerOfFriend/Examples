@@ -15,6 +15,7 @@ find_package(Qt5Core CONFIG REQUIRED)
 find_package(Qt5Gui CONFIG REQUIRED)
 find_package(Qt5Sql CONFIG REQUIRED)
 find_package(Qt5Widgets CONFIG REQUIRED)
+find_package(Qt5Network CONFIG REQUIRED)
 
 # Ищим хидеры
 file(GLOB_RECURSE BIN_HEADERS
@@ -48,6 +49,7 @@ set(LINKING_LIBS
     Qt5::Gui
     Qt5::Sql
     Qt5::Widgets
+    Qt5::Network
     )
 
 if (NOT WIN32)

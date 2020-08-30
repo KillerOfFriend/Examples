@@ -8,6 +8,7 @@
 
 #include "sqlite.h"
 #include "datastorege.h"
+#include "network.h"
 
 //-----------------------------------------------------------------------------
 /**
@@ -43,6 +44,7 @@ private:
 
     SqLite mDb; ///< База данных
     std::shared_ptr<DataStorege> mDataStorege = nullptr; ///< Хранилище данных
+    std::unique_ptr<NetWork> mNetWork = nullptr; ///< Сетевой функционал
     eAppRole mAppRole = eAppRole::arNone; ///< Роль приложения
 
     /**

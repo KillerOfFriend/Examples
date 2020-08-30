@@ -8,11 +8,12 @@ DataStorege::DataStorege(QObject *inParent) : QObject(inParent)
 
 }
 //-----------------------------------------------------------------------------
-DataStorege::DataStorege(const std::vector<CustomData>& inData, QObject *inParent)
-    : QObject(inParent),
-      mData(inData)
+void DataStorege::init(const std::vector<CustomData>& inData)
 {
-
+    std::lock_guard<std::mutex> lg(mDataDefender);
+    sig_onStartRestart();
+    mData = inData;
+    sig_onEndRestart();
 }
 //-----------------------------------------------------------------------------
 quint64 DataStorege::getRowCount() const

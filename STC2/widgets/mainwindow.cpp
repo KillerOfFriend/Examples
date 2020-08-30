@@ -5,6 +5,8 @@
 
 #include "comboboxdelegate.h"
 #include "customtablemodel.h"
+#include "tcpserver.h"
+#include "tcpclient.h"
 
 //-----------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget *inParent) :
@@ -14,12 +16,17 @@ MainWindow::MainWindow(QWidget *inParent) :
 {
     ui->setupUi(this);
 
+    mDataStorege = std::make_shared<DataStorege>(); // Инициализируем источник данных
+
     initTable();
 }
 //-----------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
     delete ui;
+
+    if (mNetWork) // Останавливаем сеть
+        mNetWork->stop();
 
     if (mAppRole == eAppRole::arServer && mDataStorege)
         mDb.saveToDB(mDataStorege->dump());
@@ -58,17 +65,21 @@ eAppRole MainWindow::selectAppRole()
     if (becomeServer()) // Пытаемся стать сервером
     {
         Result = eAppRole::arServer;
-        mDataStorege = std::make_shared<DataStorege>(mDb.loadFromDB()); // Инициализируем из БД
+        mDataStorege->init(mDb.loadFromDB()); // Инициализируем из БД
+        setWindowTitle("Server");
     }
     else
     {
         if (becomeClient()) // Пытаемся стать клиентом
         {
             Result = eAppRole::arClient;
-            mDataStorege = std::make_shared<DataStorege>(); // Инициализируем по сети
+            setWindowTitle("Client");
         }
         else
+        {
             Result = eAppRole::arNone; // Жизнь прошла зря...
+            mDataStorege = nullptr;
+        }
     }
 
     return Result;
@@ -76,14 +87,22 @@ eAppRole MainWindow::selectAppRole()
 //-----------------------------------------------------------------------------
 bool MainWindow::becomeServer()
 {
-    bool Result = true;//false;
+    mNetWork = std::make_unique<TcpServer>(QHostAddress::Any, 7485, mDataStorege);
+    bool Result = mNetWork->start(); // Пытаемся запустить сервер
+
+    if (!Result) // Запуск не прошёл
+        mNetWork = nullptr;
 
     return Result;
 }
 //-----------------------------------------------------------------------------
 bool MainWindow::becomeClient()
 {
-    bool Result = false;
+    mNetWork = std::make_unique<TcpClient>(QHostAddress::LocalHost, 7485, mDataStorege);
+    bool Result = mNetWork->start(); // Пытаемся запустить подключить клиент
+
+    if (!Result) // Запуск не прошёл
+        mNetWork = nullptr;
 
     return Result;
 }
