@@ -5,6 +5,7 @@ build-*
 PathWalker/Build/
 STC1/build/
 STC2/build/
+FileManager/build/
 
 *.user
 
