@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/mainform.qml</file>
+        <file>qml/forms/mainform.qml</file>
+        <file>qml/widgets/FsIconView.qml</file>
+        <file>qml/widgets/FsTableView.qml</file>
     </qresource>
 </RCC>

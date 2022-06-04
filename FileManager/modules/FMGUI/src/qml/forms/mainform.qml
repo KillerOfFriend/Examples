@@ -1,5 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
+
+import "../widgets"
 
 //window containing the application
 ApplicationWindow {
@@ -7,7 +10,7 @@ ApplicationWindow {
     visible: true
 
     //title of the application
-    title: qsTr("Hello World")
+    title: qsTr("File Manager")
     width: 640
     height: 480
 
@@ -28,10 +31,19 @@ ApplicationWindow {
 
     //Content Area
 
-    //a button in the middle of the content area
-    Button {
-        text: qsTr("Hello World")
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+    ColumnLayout {
+
+        id: mainColumnLayout
+        anchors.fill: parent
+        spacing: 5
+        anchors.leftMargin: 20
+        anchors.rightMargin: 20
+
+        FsTableView {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+        }
     }
+
+
 }
