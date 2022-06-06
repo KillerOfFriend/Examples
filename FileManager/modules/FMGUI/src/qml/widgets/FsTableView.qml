@@ -4,30 +4,49 @@ import QtQuick.Controls 1.4
 Item {
     id: fsTableView
 
+    Component {
+        id: nameDelegate
+
+        Item {
+            Image {
+                id: nameImage
+                width: parent.height; height: parent.height
+                fillMode: Image.Stretch
+                source: model.imageURL
+            }
+
+            Text {
+                id: nameText
+                text: model.name
+                anchors.left: nameImage.right
+                width: parent.width - nameImage .width
+                elide: Text.ElideRight
+            }
+        }
+    }
+
+
+    Component {
+        id: rowDelegate
+
+        Rectangle {
+            id: rowDel
+            width: parent.width; height: 30
+            color: styleData.selected ? "lightsteelblue" :  "white"
+
+        //            MouseArea {
+        //                anchors.fill: parent
+        //                onClicked: {
+        //                    console.log("[!] log: " + modelRow);
+        //                }
+        //            }
+        }
+    }
+
+
     TableView {
         id: tableView
         anchors.fill: parent
-
-        Component {
-            id: nameDelegate
-
-            Item {
-                Image {
-                    id: nameImage
-                    width: 20; height: 20
-                    fillMode: Image.Stretch
-                    source: model.imageURL
-                }
-
-                Text {
-                    id: nameText
-                    text: model.name
-                    anchors.left: nameImage.right
-                    width: parent.width - nameImage .width
-                    elide: Text.ElideRight
-                }
-            }
-        }
 
         TableViewColumn {
             role: "name"
@@ -55,6 +74,7 @@ Item {
             //width: 200
         }
 
+        rowDelegate: rowDelegate
 
         model: fsModel
         focus: true
