@@ -8,19 +8,26 @@ Item {
         Item {
             width: gridView.cellWidth; height: gridView.cellHeight
             Column {
+                anchors.horizontalCenter: parent.horizontalCenter
+
                 Image {
                     width: 60; height: 60
                     fillMode: Image.Stretch
                     source: model.imageURL
 
                 }
+
                 Text {
                     text: model.name
                     anchors.horizontalCenter: parent.horizontalCenter
                     horizontalAlignment: Text.AlignHCenter
                     wrapMode: TextEdit.WordWrap;
                 }
-                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: gridView.currentIndex = index
             }
         }
     }

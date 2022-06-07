@@ -21,6 +21,11 @@ Item {
                 text: model.name
                 anchors.left: nameImage.right
             }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: listView.currentIndex = index
+            }
         }
     }
 
