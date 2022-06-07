@@ -32,7 +32,7 @@ Item {
         Rectangle {
             id: rowDel
             width: parent.width; height: 30
-            color: styleData.selected ? "lightsteelblue" :  "white"
+            color: styleData.selected ? "lightsteelblue" :  "transparent"
 
         //            MouseArea {
         //                anchors.fill: parent
@@ -40,6 +40,7 @@ Item {
         //                    console.log("[!] log: " + modelRow);
         //                }
         //            }
+
         }
     }
 

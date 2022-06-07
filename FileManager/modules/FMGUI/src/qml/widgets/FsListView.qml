@@ -30,7 +30,7 @@ Item {
             width: listView.currentItem.width; height: listView.currentItem.height
             color: "lightsteelblue"
             y: listView.currentItem.y;
-            Behavior on y { SpringAnimation { spring: 5; damping: 0.2 } }
+            Behavior on y { SpringAnimation { spring: 4; damping: 0.2 } }
         }
     }
 
@@ -40,7 +40,6 @@ Item {
 
         model: fsModel
         delegate: fsListDelegate
-        //highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
 
         highlight: fsListHighlightDelegate
         highlightFollowsCurrentItem: false

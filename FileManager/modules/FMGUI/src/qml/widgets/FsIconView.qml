@@ -6,21 +6,34 @@ Item {
     Component {
         id: fsIconDelegate
         Item {
-            width: grid.cellWidth; height: grid.cellHeight
+            width: gridView.cellWidth; height: gridView.cellHeight
             Column {
-                anchors.fill: parent
                 Image {
-                    width: 60; height: 60;
+                    width: 60; height: 60
                     fillMode: Image.Stretch
-                    source: model.imageURL;
-                    anchors.horizontalCenter: parent.horizontalCenter;
+                    source: model.imageURL
+
                 }
                 Text {
-                    text: model.name;
-                    anchors.horizontalCenter: parent.horizontalCenter;
+                    text: model.name
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    horizontalAlignment: Text.AlignHCenter
                     wrapMode: TextEdit.WordWrap;
                 }
+                anchors.horizontalCenter: parent.horizontalCenter
             }
+        }
+    }
+
+    Component {
+        id: fsIconHighlightDelegate
+        Rectangle {
+            width: gridView.cellWidth; height: gridView.cellHeight
+            color: "lightsteelblue"; radius: 5
+            x: gridView.currentItem.x
+            y: gridView.currentItem.y
+            Behavior on x { SpringAnimation { spring: 4; damping: 0.2 } }
+            Behavior on y { SpringAnimation { spring: 4; damping: 0.2 } }
         }
     }
 
@@ -31,7 +44,9 @@ Item {
 
         model: fsModel
         delegate: fsIconDelegate
-        highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+
+        highlight: fsIconHighlightDelegate
+        highlightFollowsCurrentItem: false
         focus: true
     }
 }
