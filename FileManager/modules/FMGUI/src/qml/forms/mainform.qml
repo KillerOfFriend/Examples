@@ -12,6 +12,9 @@ ApplicationWindow {
     width: 640
     height: 480
 
+    //---------------------------------------------------------------------
+    // Actions
+    //---------------------------------------------------------------------
     ActionGroup {
         id: viewActions
         exclusive: true
@@ -20,30 +23,27 @@ ApplicationWindow {
             id: iconViewAction
             checkable: true
             text: qsTr("Icon")
-            onTriggered: viewLoader.source = "qrc:/qml/widgets/FsIconView.qml"
+            onTriggered: viewLoader.source = checked ? "qrc:/qml/widgets/FsIconView.qml" : ""
         }
         Action {
             id: tableViewAction
             checkable: true
             text: qsTr("Table")
-            onTriggered: viewLoader.source = "qrc:/qml/widgets/FsTableView.qml"
+            onTriggered: viewLoader.source = checked ? "qrc:/qml/widgets/FsTableView.qml" : ""
         }
         Action { id: listViewAction
             checkable: true
             text: qsTr("List")
-            onTriggered: viewLoader.source = "qrc:/qml/widgets/FsListView.qml"
+            onTriggered: viewLoader.source = checked ? "qrc:/qml/widgets/FsListView.qml" : ""
         }
     }
-
-    //menu containing two menu items
+    //---------------------------------------------------------------------
+    // Menu
+    //---------------------------------------------------------------------
     menuBar: MenuBar {
         Menu {
             title: qsTr("File")
 
-            MenuItem {
-                text: qsTr("&Open")
-                onTriggered: console.log("Open action triggered");
-            }
             MenuItem {
                 text: qsTr("Exit")
                 onTriggered: Qt.quit();
@@ -58,29 +58,60 @@ ApplicationWindow {
             MenuItem { action: listViewAction }
         }
     }
-
-    //Content Area
-
-//    ColumnLayout {
-
-//        id: mainColumnLayout
-//        anchors.fill: parent
-//        spacing: 5
-//        anchors.leftMargin: 20
-//        anchors.rightMargin: 20
-
-//        FsIconView {
-//            Layout.fillHeight: true
-//            Layout.fillWidth: true
-//        }
-//    }
-
-    Loader {
-        id: viewLoader
-
+    //---------------------------------------------------------------------
+    // Content Area
+    //---------------------------------------------------------------------
+    ColumnLayout {
+        //---------------------------------------------------------------------
+        id: mainColumnLayout
         anchors.fill: parent
-        focus: true
+        spacing: 5
+        anchors.topMargin: 5
+        anchors.leftMargin: 5
+        anchors.rightMargin: 5
+        //---------------------------------------------------------------------
+        RowLayout {
+            //anchors.top: parent.top
+            width: parent.width
+
+            spacing: 5
+            anchors.leftMargin: 5
+            anchors.rightMargin: 5
+
+            TextField {
+                id: pathEdit
+
+                Layout.fillWidth: true
+                height: 30
+
+                text: fsPath
+            }
+
+            Button {
+                id: upButton
+
+                Layout.preferredWidth: height
+                width: 30; height: 30
+
+                text: "Up"
+            }
+        }
+        //---------------------------------------------------------------------
+        Item {
+            Layout.alignment: Qt.AlignBottom
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Loader {
+                id: viewLoader
+                anchors.fill: parent
+                focus: true
+            }
+        }
+        //---------------------------------------------------------------------
     }
+
+
 
     Component.onCompleted: { iconViewAction.trigger() }
 }
