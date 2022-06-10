@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 import "../widgets"
 
 ApplicationWindow {
-
+    id: mainWindow
     visible: true
 
     title: qsTr("File Manager")
@@ -84,7 +84,8 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 height: 30
 
-                text: fsPath
+                text: DataSource.path()
+                readOnly: true
             }
 
             Button {
@@ -94,6 +95,11 @@ ApplicationWindow {
                 width: 30; height: 30
 
                 text: "Up"
+
+                onClicked: {
+                    DataSource.dirUp();
+                    pathEdit.text = DataSource.path()
+                }
             }
         }
         //---------------------------------------------------------------------
@@ -111,7 +117,7 @@ ApplicationWindow {
         //---------------------------------------------------------------------
     }
 
-
-
-    Component.onCompleted: { iconViewAction.trigger() }
+    Component.onCompleted: {
+        iconViewAction.trigger()
+    }
 }

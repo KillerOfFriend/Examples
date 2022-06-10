@@ -25,6 +25,10 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: listView.currentIndex = index
+                onDoubleClicked: {
+                    if (model.type === "Dir")
+                        DataSource.setPath(model.objectpath);
+                }
             }
         }
     }

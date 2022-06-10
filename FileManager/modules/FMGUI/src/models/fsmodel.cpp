@@ -10,11 +10,14 @@ static std::once_flag ColumnsArrayInit;
 std::array<QString, FsModel::eColumns::cCount> FsModel::m_columnsText;
 const QHash<int, QByteArray> FsModel::m_roles =
 {
+    // Роли отображения
     { FsModel::rNameRole, "name"},
     { FsModel::rTypeRole, "type"},
     { FsModel::rSizeRole, "size"},
     { FsModel::rLastChangeDateRole, "lastchangedate"},
-//    { Qt::TextAlignmentRole, "aligment"},
+    // Служебные роли
+    { FsModel::rObjectPathRole, "objectpath"},
+
     { Qt::DecorationRole, "imageURL"}
 };
 //-----------------------------------------------------------------------------
@@ -54,11 +57,14 @@ QVariant FsModel::data(const QModelIndex &index, int role) const
 
     switch (role)
     {
+        // Роли отображения
         case rNameRole:             { Result = ItemInfo.fileName(); break; }
         case rTypeRole:             { Result = (ItemInfo.isDir()) ? "Dir" : ItemInfo.suffix(); break; }
         case rSizeRole:             { Result = (ItemInfo.isDir()) ? QVariant() : ItemInfo.size(); break; }
         case rLastChangeDateRole:   { Result = ItemInfo.lastModified().toString("HH:mm:ss MM-dd.MM.yyyy"); break; }
 
+        // Служебные роли
+        case rObjectPathRole:       { Result = ItemInfo.absoluteFilePath(); break; }
         case Qt::DecorationRole:
         {
             Result = ItemInfo.isDir() ? "qrc:/img/directory.png" : "qrc:/img/file.png";
@@ -87,7 +93,9 @@ QVariant FsModel::headerData(int section, Qt::Orientation orientation, int role)
 //-----------------------------------------------------------------------------
 void FsModel::setDir(const QDir& inDir)
 {
+    layoutAboutToBeChanged();
     m_dirContent = inDir.entryInfoList();
+    layoutChanged();
 }
 //-----------------------------------------------------------------------------
 

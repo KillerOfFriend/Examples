@@ -19,7 +19,7 @@ Item {
                 id: nameText
                 text: model.name
                 anchors.left: nameImage.right
-                width: parent.width - nameImage .width
+                width: parent.width - nameImage.width
                 elide: Text.ElideRight
             }
         }
@@ -34,12 +34,13 @@ Item {
             width: parent.width; height: 30
             color: styleData.selected ? "lightsteelblue" :  "transparent"
 
-        //            MouseArea {
-        //                anchors.fill: parent
-        //                onClicked: {
-        //                    console.log("[!] log: " + modelRow);
-        //                }
-        //            }
+            MouseArea {
+                anchors.fill: parent
+                onDoubleClicked: {
+                    if (model.type === "Dir")
+                        DataSource.setPath(model.objectpath);
+                }
+            }
 
         }
     }

@@ -17,10 +17,14 @@ public:
     enum eColumns { cName = 0, cType = 1, cSize = 2, cLastChangeDate = 3, cCount };
     enum eRoles
     {
+        // Роли отображения
         rNameRole =             Qt::UserRole + FsModel::cName,
         rTypeRole =             Qt::UserRole + FsModel::cType,
         rSizeRole =             Qt::UserRole + FsModel::cSize,
-        rLastChangeDateRole =   Qt::UserRole + FsModel::cLastChangeDate
+        rLastChangeDateRole =   Qt::UserRole + FsModel::cLastChangeDate,
+
+        // Служебные роли
+        rObjectPathRole =         Qt::UserRole + FsModel::cCount + 1
     };
 
     FsModel(QObject* inParent = nullptr);

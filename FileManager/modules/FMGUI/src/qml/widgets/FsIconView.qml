@@ -11,7 +11,9 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Image {
-                    width: 60; height: 60
+                    id: objectImage
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: 50; height: 50
                     fillMode: Image.Stretch
                     source: model.imageURL
 
@@ -19,16 +21,25 @@ Item {
 
                 Text {
                     text: model.name
+                    width: gridView.cellWidth
+                    height: parent.height - objectImage.height
                     anchors.horizontalCenter: parent.horizontalCenter
                     horizontalAlignment: Text.AlignHCenter
-                    wrapMode: TextEdit.WordWrap;
+                    wrapMode: Text.Wrap
+                    //elide: Text.ElideRight
                 }
             }
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: gridView.currentIndex = index
+                onDoubleClicked: {
+                    if (model.type === "Dir")
+                        DataSource.setPath(model.objectpath);
+                }
             }
+
+
         }
     }
 
