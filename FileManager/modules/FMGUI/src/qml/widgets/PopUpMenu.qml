@@ -48,6 +48,8 @@ Menu {
         }
     }
 
+    property string targetObjectPath: ""
+
     MenuItem { action: copyAction }
     MenuItem { action: cutAction }
     MenuItem { action: pastAction }

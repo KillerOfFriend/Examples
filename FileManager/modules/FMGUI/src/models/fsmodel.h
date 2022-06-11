@@ -24,7 +24,7 @@ public:
         rLastChangeDateRole =   Qt::UserRole + FsModel::cLastChangeDate,
 
         // Служебные роли
-        rObjectPathRole =         Qt::UserRole + FsModel::cCount + 1
+        rObjectPathRole =       Qt::UserRole + FsModel::cCount + 1
     };
 
     FsModel(QObject* inParent = nullptr);

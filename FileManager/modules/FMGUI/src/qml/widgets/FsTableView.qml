@@ -44,6 +44,7 @@ Item {
 
                 onClicked: {
                     if(mouse.button & Qt.RightButton) {
+                        veiwPopupMenu.targetObjectPath = model.objectpath
                         veiwPopupMenu.popup()
                     }
                 }

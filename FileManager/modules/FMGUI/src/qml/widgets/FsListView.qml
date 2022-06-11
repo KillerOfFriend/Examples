@@ -34,6 +34,7 @@ Item {
                     listView.currentIndex = index
 
                     if(mouse.button & Qt.RightButton) {
+                        veiwPopupMenu.targetObjectPath = model.objectpath
                         veiwPopupMenu.popup()
                     }
                 }
