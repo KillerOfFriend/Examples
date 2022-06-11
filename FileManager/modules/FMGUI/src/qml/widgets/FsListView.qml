@@ -3,6 +3,10 @@ import QtQuick 2.0
 Item {
     id: fsListView
 
+    PopUpMenu {
+        id: veiwPopupMenu
+    }
+
     Component {
         id: fsListDelegate
 
@@ -24,9 +28,18 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: listView.currentIndex = index
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                onClicked: {
+                    listView.currentIndex = index
+
+                    if(mouse.button & Qt.RightButton) {
+                        veiwPopupMenu.popup()
+                    }
+                }
+
                 onDoubleClicked: {
-                    if (model.type === "Dir")
+                    if (mouse.button & Qt.LeftButton && model.type === "Dir")
                         DataSource.setPath(model.objectpath);
                 }
             }

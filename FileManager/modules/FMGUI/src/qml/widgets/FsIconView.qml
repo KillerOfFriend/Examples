@@ -3,6 +3,10 @@ import QtQuick 2.12
 Item {
     id: fsIconView
 
+    PopUpMenu {
+        id: veiwPopupMenu
+    }
+
     Component {
         id: fsIconDelegate
         Item {
@@ -32,9 +36,18 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: gridView.currentIndex = index
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                onClicked: {
+                    gridView.currentIndex = index
+
+                    if(mouse.button & Qt.RightButton) {
+                        veiwPopupMenu.popup()
+                    }
+                }
+
                 onDoubleClicked: {
-                    if (model.type === "Dir")
+                    if (mouse.button & Qt.LeftButton && model.type === "Dir")
                         DataSource.setPath(model.objectpath);
                 }
             }

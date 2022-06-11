@@ -4,5 +4,6 @@
         <file>qml/widgets/FsIconView.qml</file>
         <file>qml/widgets/FsTableView.qml</file>
         <file>qml/widgets/FsListView.qml</file>
+        <file>qml/widgets/PopUpMenu.qml</file>
     </qresource>
 </RCC>

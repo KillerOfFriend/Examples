@@ -4,6 +4,10 @@ import QtQuick.Controls 1.4
 Item {
     id: fsTableView
 
+    PopUpMenu {
+        id: veiwPopupMenu
+    }
+
     Component {
         id: nameDelegate
 
@@ -36,8 +40,16 @@ Item {
 
             MouseArea {
                 anchors.fill: parent
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                onClicked: {
+                    if(mouse.button & Qt.RightButton) {
+                        veiwPopupMenu.popup()
+                    }
+                }
+
                 onDoubleClicked: {
-                    if (model.type === "Dir")
+                    if (mouse.button & Qt.LeftButton && model.type === "Dir")
                         DataSource.setPath(model.objectpath);
                 }
             }

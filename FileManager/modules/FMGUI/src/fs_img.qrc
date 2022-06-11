@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>img/directory.png</file>
         <file>img/file.png</file>
+        <file>img/cut.png</file>
+        <file>img/delete.png</file>
+        <file>img/copy_past.png</file>
     </qresource>
 </RCC>
