@@ -83,8 +83,6 @@ ApplicationWindow {
 
                 Layout.fillWidth: true
                 height: 30
-
-                text: DataSource.path()
                 readOnly: true
             }
 
@@ -96,10 +94,7 @@ ApplicationWindow {
 
                 text: "Up"
 
-                onClicked: {
-                    DataSource.dirUp();
-                    pathEdit.text = DataSource.path()
-                }
+                onClicked: DataSource.dirUp()
             }
         }
         //---------------------------------------------------------------------
@@ -118,6 +113,12 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+        pathEdit.text = DataSource.path()
         iconViewAction.trigger()
+    }
+
+    Connections {
+        target: DataSource
+        onPathChenged: pathEdit.text = inNewPath
     }
 }

@@ -16,14 +16,16 @@ public:
 
     FsModel& model();
 
+    Q_INVOKABLE void setPath(const QString& inPath);
+    Q_INVOKABLE QString path();
+    Q_INVOKABLE void dirUp();
+
 private:
-    QDir m_currentDir = QDir::home();
+    QDir m_currentDir;
     FsModel fsModel;
 
-public slots:
-    void setPath(const QString& inPath);
-    QString path();
-    void dirUp();
+signals:
+    void pathChenged(QString inNewPath);
 
 };
 //-----------------------------------------------------------------------------
