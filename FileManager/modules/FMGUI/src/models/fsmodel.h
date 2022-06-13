@@ -14,17 +14,26 @@
 class FsModel : public QAbstractTableModel
 {
 public:
-    enum eColumns { cName = 0, cType = 1, cSize = 2, cLastChangeDate = 3, cCount };
-    enum eRoles
+    enum eColumns ///< Перечень столбцов
+    {
+        cName = 0,              ///< Имя объекта
+        cType = 1,              ///< Тип объекта
+        cSize = 2,              ///< Размер объекта
+        cLastChangeDate = 3,    ///< Дата последнего изменения объекта
+
+        cCount                  ///< Счётчик столбцов
+    };
+
+    enum eRoles                 ///< Роли доступа к данным
     {
         // Роли отображения
-        rNameRole =             Qt::UserRole + FsModel::cName,
-        rTypeRole =             Qt::UserRole + FsModel::cType,
-        rSizeRole =             Qt::UserRole + FsModel::cSize,
-        rLastChangeDateRole =   Qt::UserRole + FsModel::cLastChangeDate,
+        rNameRole =             Qt::UserRole + FsModel::cName,              ///< Роль имени объекта
+        rTypeRole =             Qt::UserRole + FsModel::cType,              ///< Роль типа объекта
+        rSizeRole =             Qt::UserRole + FsModel::cSize,              ///< Роль размера объекта
+        rLastChangeDateRole =   Qt::UserRole + FsModel::cLastChangeDate,    ///< Роль даты последнего изменения объекта
 
         // Служебные роли
-        rObjectPathRole =       Qt::UserRole + FsModel::cCount + 1
+        rObjectPathRole =       Qt::UserRole + FsModel::cCount + 1          ///< Роль полного пути к объекту
     };
 
     FsModel(QObject* inParent = nullptr);

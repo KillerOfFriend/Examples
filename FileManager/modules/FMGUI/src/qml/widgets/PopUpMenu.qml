@@ -44,7 +44,7 @@ Menu {
             icon.source: "qrc:/img/delete.png"
             icon.color: "transparent"
 
-            onTriggered: { console.log("delete"); }
+            onTriggered: { Helper.remove(targetObjectPath) }
         }
     }
 

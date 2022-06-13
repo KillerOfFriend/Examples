@@ -6,7 +6,7 @@
 #include <QDateTime>
 
 //-----------------------------------------------------------------------------
-static std::once_flag ColumnsArrayInit;
+static std::once_flag ColumnsArrayInit; /// < Флаг инициализации текста столбцов
 std::array<QString, FsModel::eColumns::cCount> FsModel::m_columnsText;
 const QHash<int, QByteArray> FsModel::m_roles =
 {

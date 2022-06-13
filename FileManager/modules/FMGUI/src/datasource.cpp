@@ -11,14 +11,14 @@ FsModel& DataSource::model()
     return fsModel;
 }
 //-----------------------------------------------------------------------------
-QString DataSource::path()
+QString DataSource::path() const
 {
     return m_currentDir.path();
 }
 //-----------------------------------------------------------------------------
 void DataSource::setPath(const QString& inPath)
 {
-    if (inPath == m_currentDir.path())
+    if (inPath.isEmpty() || inPath == m_currentDir.path())
         return;
 
     m_currentDir.cd(inPath);
