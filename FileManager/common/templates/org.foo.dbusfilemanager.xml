@@ -1,0 +1,21 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.foo.dbusfilemanager">
+    <method name="copyObject">
+      <arg type="b" direction="out"/>
+      <arg name="inPath" type="s" direction="in"/>
+    </method>
+    <method name="cutObject">
+      <arg type="b" direction="out"/>
+      <arg name="inPath" type="s" direction="in"/>
+    </method>
+    <method name="pasteObject">
+      <arg type="b" direction="out"/>
+      <arg name="inPath" type="s" direction="in"/>
+    </method>
+    <method name="deleteObject">
+      <arg type="b" direction="out"/>
+      <arg name="inPath" type="s" direction="in"/>
+    </method>
+  </interface>
+</node>

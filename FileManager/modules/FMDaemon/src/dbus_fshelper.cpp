@@ -1,28 +1,30 @@
-#include "fshelper.h"
+#include "dbus_fshelper.h"
+
+#include <QDir>
 
 //-----------------------------------------------------------------------------
-FsHelper::FsHelper(QObject *parent) : QObject(parent)
+DBusFsHelper::DBusFsHelper(QObject *inParent) : QObject(inParent)
 {
 
 }
 //-----------------------------------------------------------------------------
-void FsHelper::copy(const QString inPath)
+bool DBusFsHelper::copyObject(const QString& inPath)
 {
-
+    return true;
 }
 //-----------------------------------------------------------------------------
-void FsHelper::cut(const QString inPath)
+bool DBusFsHelper::cutObject(const QString& inPath)
 {
-
+   return true;
 }
 //-----------------------------------------------------------------------------
-void FsHelper::paste(const QDir inDir)
+bool DBusFsHelper::pasteObject(const QString& inPath)
 {
-
+    return true;
 }
 //-----------------------------------------------------------------------------
-void FsHelper::remove(const QString inPath)
+bool DBusFsHelper::deleteObject(const QString& inPath)
 {
-
+    return true;
 }
 //-----------------------------------------------------------------------------

@@ -1,7 +1,12 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
 
+import fsDBusAdapter 1.0
+
 Menu {
+
+    FsDBusAdapter { id: helper }
+
     ActionGroup {
         id: fsActions
         exclusive: true
@@ -13,7 +18,7 @@ Menu {
             icon.color: "transparent"
             icon.source: "qrc:/img/copy_past.png"
 
-            onTriggered: { console.log("copy"); }
+            onTriggered: { helper.copy(targetObjectPath); }
         }
 
         Action {
@@ -23,17 +28,17 @@ Menu {
             icon.source: "qrc:/img/cut.png"
             icon.color: "transparent"
 
-            onTriggered: { console.log("cut"); }
+            onTriggered: { helper.cut(targetObjectPath); }
         }
 
         Action {
-            id: pastAction
+            id: pasteAction
             text: qsTr("past")
 
             icon.source: "qrc:/img/copy_past.png"
             icon.color: "transparent"
 
-            onTriggered: { console.log("past"); }
+            onTriggered: { helper.paste(targetObjectPath); }
         }
 
 
@@ -44,7 +49,7 @@ Menu {
             icon.source: "qrc:/img/delete.png"
             icon.color: "transparent"
 
-            onTriggered: { Helper.remove(targetObjectPath) }
+            onTriggered: { helper.remove(targetObjectPath); }
         }
     }
 
@@ -52,7 +57,7 @@ Menu {
 
     MenuItem { action: copyAction }
     MenuItem { action: cutAction }
-    MenuItem { action: pastAction }
+    MenuItem { action: pasteAction }
     MenuItem { action: deleteAction }
 }
 

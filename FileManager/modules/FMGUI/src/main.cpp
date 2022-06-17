@@ -4,7 +4,7 @@
 #include <QQmlApplicationEngine>
 
 #include "datasource.h"
-#include "fshelper.h"
+#include "fsdbusadapter.h"
 
 //-----------------------------------------------------------------------------
 int main(int argc, char *argv[])
@@ -13,13 +13,13 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine applicationEngine;
     //QQuickStyle::setStyle("Material");
 
-    FsHelper Helper; // Интерфейс взаимодействия с демоном
+    qmlRegisterType<FsDBusAdapter>("fsDBusAdapter", 1, 0, "FsDBusAdapter");
+
     DataSource dataSource; // Источник данных
     dataSource.setPath(QDir::home().path()); // Устанавливаем домашний каталог пользователя как текущую директорию
     // Пробросим в QML объекты управления
     applicationEngine.rootContext()->setContextProperty("DataSource", &dataSource);
     applicationEngine.rootContext()->setContextProperty("fsModel", &dataSource.model());
-    applicationEngine.rootContext()->setContextProperty("Helper", &Helper);
     // Загружаем главную форму из ресурса
     applicationEngine.load(QUrl("qrc:/qml/forms/mainform.qml"));
     // Проверяем успешнсто загрузки

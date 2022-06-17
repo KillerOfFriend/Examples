@@ -1,5 +1,5 @@
 #include "fsmodel.h"
-//https://gitlab.com/RyanHampton/qml-model-view-framework/-/tree/master/Download-Manager
+
 #include <mutex>
 
 #include <QIcon>

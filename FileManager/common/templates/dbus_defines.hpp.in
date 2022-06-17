@@ -1,0 +1,7 @@
+#ifndef DEFINES_HPP
+#define DEFINES_HPP
+
+#define DBUS_SERVICE_NAME   "${DBUS_SERVICE_NAME}"
+#define DBUS_OBJECT_NAME    "/${DBUS_OBJECT_NAME}"
+
+#endif // DEFINES_HPP
