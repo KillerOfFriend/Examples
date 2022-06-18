@@ -26,7 +26,7 @@ bool DBusFsHelper::pasteObject(const QString& inPath)
 {
     bool Result = true;
 
-    if ( Result = (m_buffAction != nullptr) )
+    if ( Result = !bufferIsEmpty() )
     {
         Result = m_buffAction->execute(inPath);
         // Копирование можно провести повторно, перемещение нельзя
@@ -46,5 +46,10 @@ bool DBusFsHelper::deleteObject(const QString& inPath)
         Result = RemoveAction.execute();
 
     return Result;
+}
+//-----------------------------------------------------------------------------
+bool DBusFsHelper::bufferIsEmpty() const
+{
+    return m_buffAction == nullptr;
 }
 //-----------------------------------------------------------------------------

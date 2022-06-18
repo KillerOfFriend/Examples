@@ -6,10 +6,10 @@
 #include "datasource.h"
 #include "fsdbusadapter.h"
 
-
 //-----------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
+    int Result = EXIT_SUCCESS;
     QApplication application(argc, argv);
     QQmlApplicationEngine applicationEngine;
     QQuickStyle::setStyle("Material");
@@ -23,10 +23,13 @@ int main(int argc, char *argv[])
     applicationEngine.rootContext()->setContextProperty("fsModel", &dataSource.model());
     // Загружаем главную форму из ресурса
     applicationEngine.load(QUrl("qrc:/qml/forms/mainform.qml"));
+
     // Проверяем успешнсто загрузки
     if (applicationEngine.rootObjects().isEmpty())
-         return EXIT_FAILURE;
+         Result = EXIT_FAILURE;
     else
-        return application.exec();
+        Result = application.exec();
+
+    return Result;
 }
 //-----------------------------------------------------------------------------

@@ -62,6 +62,12 @@ public slots:
     ///
     bool deleteObject(const QString& inPath);
 
+    ///
+    /// \brief bufferIsEmpty - Метод вернёт признак того, что буфер пуст
+    /// \return Вернёт признак того, что буфер пуст
+    ///
+    bool bufferIsEmpty() const;
+
 private:
 
     std::unique_ptr<AbstractFsAction> m_buffAction; ///< Буфер с подготовленным действием копирования или удаления

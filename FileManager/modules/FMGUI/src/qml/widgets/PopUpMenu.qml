@@ -4,6 +4,7 @@ import QtQuick.Controls 2.12
 import fsDBusAdapter 1.0
 
 Menu {
+    id: popupMenu
 
     FsDBusAdapter { id: helper }
 
@@ -25,8 +26,8 @@ Menu {
             id: cutAction
             text: qsTr("cut")
 
-            icon.source: "qrc:/img/cut.png"
             icon.color: "transparent"
+            icon.source: "qrc:/img/cut.png"
 
             onTriggered: { helper.cut(targetObjectPath); }
         }
@@ -35,8 +36,8 @@ Menu {
             id: pasteAction
             text: qsTr("past")
 
-            icon.source: "qrc:/img/copy_past.png"
             icon.color: "transparent"
+            icon.source: "qrc:/img/copy_past.png"
 
             onTriggered: {
                 if (helper.paste(DataSource.path()))
@@ -48,8 +49,8 @@ Menu {
             id: deleteAction
             text: qsTr("delete")
 
-            icon.source: "qrc:/img/delete.png"
             icon.color: "transparent"
+            icon.source: "qrc:/img/delete.png"
 
             onTriggered: {
                 if (helper.remove(targetObjectPath))
@@ -60,9 +61,14 @@ Menu {
 
     property string targetObjectPath: ""
 
-    MenuItem { action: copyAction }
-    MenuItem { action: cutAction }
-    MenuItem { action: pasteAction }
-    MenuItem { action: deleteAction }
+    MenuItem { id: copyMenuItem; height: visible ? implicitHeight : 0;  action: copyAction }
+    MenuItem { id: cutMenuItem; height: visible ? implicitHeight : 0;  action: cutAction }
+    MenuItem { id: pasteMenuItem; height: visible ? implicitHeight : 0; action: pasteAction }
+    MenuItem { id: deleteMenuItem; height: visible ? implicitHeight : 0;  action: deleteAction }
+
+    Connections {
+        target: popupMenu
+        onAboutToShow: { pasteMenuItem.visible = !helper.bufferIsEmpty(); }
+    }
 }
 

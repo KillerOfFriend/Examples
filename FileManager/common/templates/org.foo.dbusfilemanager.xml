@@ -17,5 +17,8 @@
       <arg type="b" direction="out"/>
       <arg name="inPath" type="s" direction="in"/>
     </method>
+    <method name="bufferIsEmpty">
+      <arg type="b" direction="out"/>
+    </method>
   </interface>
 </node>

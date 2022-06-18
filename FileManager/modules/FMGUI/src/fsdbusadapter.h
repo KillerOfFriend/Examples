@@ -51,6 +51,12 @@ public:
     ///
     Q_INVOKABLE bool remove(const QString &inPath);
 
+    ///
+    /// \brief bufferIsEmpty -  Метод вернёт признак того, что буфер пуст
+    /// \return Вернёт признак того, что буфер пуст
+    ///
+    Q_INVOKABLE bool bufferIsEmpty();
+
 private:
     OrgFooDbusfilemanagerInterface m_qdbusInterface; ///< Инерфейс DBus
 };

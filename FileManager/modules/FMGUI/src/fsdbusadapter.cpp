@@ -64,3 +64,11 @@ bool FsDBusAdapter::remove(const QString &inPath)
     return Result;
 }
 //-----------------------------------------------------------------------------
+bool FsDBusAdapter::bufferIsEmpty()
+{
+    auto response = m_qdbusInterface.bufferIsEmpty(); // Вызываем метод по DBus
+    response.waitForFinished(); // Ожидаем завершения выполнения метода
+
+    return (response.isValid()) ? response.value() : false;
+}
+//-----------------------------------------------------------------------------
