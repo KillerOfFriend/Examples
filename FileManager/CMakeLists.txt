@@ -37,6 +37,7 @@ set(COMMON_FOLDER_PATH      ${PROJECT_ROOT_PATH}/common)    # Указываем
 
 set(DBUS_SERVICE_NAME       "org.foo.dbusfilemanager")      # Указываем имя сервиса DBUS
 set(DBUS_OBJECT_NAME        "dbusfilemanager")              # Указываем имя добъекта DBUS
+set(DBUS_SERVICE_LIFE       30000)                          # Указываем время жизни сервиса в милисекундах
 #====================================================================
 
 #====================================================================

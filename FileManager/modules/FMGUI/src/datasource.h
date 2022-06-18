@@ -5,9 +5,10 @@
 #include <QObject>
 
 #include "models/fsmodel.h"
+#include "object_restrictions.hpp"
 
 //-----------------------------------------------------------------------------
-class DataSource : public QObject
+class DataSource : public QObject, ors::FixedObject
 {
     Q_OBJECT
 public:

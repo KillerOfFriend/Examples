@@ -30,6 +30,7 @@ qt5_add_dbus_interface(DBUS_SRC ${COMMON_FOLDER_PATH}/templates/${DBUS_SERVICE_N
 #====================================================================
 # Формируем список подключаемых директорий
 set(INCLUDE_DIRS
+    ${COMMON_FOLDER_PATH}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
 #====================================================================
