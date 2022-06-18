@@ -10,7 +10,7 @@ int main (int argc, char * argv[])
     int Result = EXIT_SUCCESS;
     QCoreApplication a(argc, argv);
 
-    DBusFsHelper Helper;
+    fs::DBusFsHelper Helper;
     if(!QDBusConnection::sessionBus().registerObject(DBUS_OBJECT_NAME, &Helper, QDBusConnection::ExportAllSlots))
     {
         qCritical() << "Can't register object";

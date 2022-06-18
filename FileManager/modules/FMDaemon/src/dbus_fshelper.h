@@ -1,33 +1,16 @@
 #ifndef DBUS_FSHELPER_H
 #define DBUS_FSHELPER_H
 
+#include <memory>
+
 #include <QObject>
 #include <QtDBus/QtDBus>
 
 #include "dbus_defines.hpp"
+#include "fsaction.h"
 
-//-----------------------------------------------------------------------------
-///
-/// \brief The efsAcrionType enum - Перечеслиение действий над объектами файловой системы
-///
-enum class efsAcrionType
+namespace fs
 {
-    atUnknown = 0,  ///< Тип действия не орпределён
-    atCopy = 1,     ///< Копирование объекта
-    atMove = 2      ///< Перемещение объекта
-};
-//-----------------------------------------------------------------------------
-///
-/// \brief The fsAction struct - Струкрута, описывающая действие над объектом файловой системы
-///
-struct fsAction
-{
-    fsAction() = default;
-    ~fsAction() = default;
-
-    efsAcrionType m_actionType; ///< Тип действия
-    QString m_objectPath;       ///< Путь к объекту
-};
 //-----------------------------------------------------------------------------
 class DBusFsHelper : public QObject
 {
@@ -47,7 +30,10 @@ public slots:
 
 private:
 
+    std::unique_ptr<AbstractFsAction> m_buffAction;
+
 };
 //-----------------------------------------------------------------------------
+} // namespace fs
 
 #endif // DBUS_FSHELPER_H

@@ -27,7 +27,7 @@ void FsDBusAdapter::cut(const QString &inPath)
     result.waitForFinished(); // Ожидаем завершения выполнения метода
 
     if (!result.isValid() || !result.value()) // В случаи ошибки
-        QMessageBox::warning(nullptr, tr("Error"), result.error().message()); // Выводим соответствующее сообщение);
+        QMessageBox::warning(nullptr, tr("Error"), result.error().message()); // Выводим соответствующее сообщение
 }
 //-----------------------------------------------------------------------------
 void FsDBusAdapter::paste(const QString &inPath)
