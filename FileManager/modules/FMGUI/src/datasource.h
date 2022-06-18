@@ -47,10 +47,14 @@ public:
     Q_INVOKABLE void dirUp();
 
 private:
-    QDir m_currentDir;
-    FsModel fsModel;
+    QDir m_currentDir;  ///< Текущая директория
+    FsModel fsModel;    ///< Модель представления данных
 
 signals:
+    ///
+    /// \brief pathChenged - Сигнал об изменении текущего пути
+    /// \param inNewPath - Новое значение текущего пути
+    ///
     void pathChenged(QString inNewPath);
 
 };

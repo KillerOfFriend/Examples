@@ -83,6 +83,9 @@ public:
 
 };
 //-----------------------------------------------------------------------------
+///
+/// \brief The MoveFsAction class - Класс описывающий действие перемещения
+///
 class MoveFsAction : public AbstractFsAction
 {
 public:
@@ -107,6 +110,9 @@ public:
 
 };
 //-----------------------------------------------------------------------------
+///
+/// \brief The RemoveFsAction class - Класс описывающий действие удаления
+///
 class RemoveFsAction : public AbstractFsAction
 {
 public:

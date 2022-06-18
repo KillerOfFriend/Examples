@@ -5,12 +5,13 @@
 #include "dbus_defines.hpp"
 #include "dbus_fshelper.h"
 
+//-----------------------------------------------------------------------------
 int main (int argc, char * argv[])
 {
     int Result = EXIT_SUCCESS;
     QCoreApplication a(argc, argv);
-
     fs::DBusFsHelper Helper;
+    // Регистрируем объект
     if(!QDBusConnection::sessionBus().registerObject(DBUS_OBJECT_NAME, &Helper, QDBusConnection::ExportAllSlots))
     {
         qCritical() << "Can't register object";
@@ -19,7 +20,7 @@ int main (int argc, char * argv[])
     else
     {
         qDebug() << "Connected to D-bus";
-
+        // Регистрируем сервис
         if (!QDBusConnection::sessionBus().registerService(DBUS_SERVICE_NAME))
         {
             qCritical() << QDBusConnection::sessionBus().lastError().message();
@@ -27,10 +28,11 @@ int main (int argc, char * argv[])
         }
         else
         {
-            qDebug()<< "Service start";
+            qDebug() << "Service start";
             Result = a.exec();
         }
     }
 
     return Result;
 }
+//-----------------------------------------------------------------------------

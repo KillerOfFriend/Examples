@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 {
     QApplication application(argc, argv);
     QQmlApplicationEngine applicationEngine;
-    //QQuickStyle::setStyle("Material");
+    QQuickStyle::setStyle("Material");
 
     qmlRegisterType<FsDBusAdapter>("fsDBusAdapter", 1, 0, "FsDBusAdapter");
 
