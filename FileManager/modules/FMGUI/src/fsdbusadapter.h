@@ -11,10 +11,10 @@ public:
     FsDBusAdapter(QObject *inParent = nullptr);
     virtual ~FsDBusAdapter() override = default;
 
-    Q_INVOKABLE void copy(const QString &inPath);
-    Q_INVOKABLE void cut(const QString &inPath);
-    Q_INVOKABLE void paste(const QString &inPath);
-    Q_INVOKABLE void remove(const QString &inPath);
+    Q_INVOKABLE bool copy(const QString &inPath);
+    Q_INVOKABLE bool cut(const QString &inPath);
+    Q_INVOKABLE bool paste(const QString &inPath);
+    Q_INVOKABLE bool remove(const QString &inPath);
 
 private:
     OrgFooDbusfilemanagerInterface m_qdbusInterface;

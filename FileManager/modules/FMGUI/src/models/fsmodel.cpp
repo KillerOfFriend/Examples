@@ -8,18 +8,6 @@
 //-----------------------------------------------------------------------------
 static std::once_flag ColumnsArrayInit; /// < Флаг инициализации текста столбцов
 std::array<QString, FsModel::eColumns::cCount> FsModel::m_columnsText;
-const QHash<int, QByteArray> FsModel::m_roles =
-{
-    // Роли отображения
-    { FsModel::rNameRole, "name"},
-    { FsModel::rTypeRole, "type"},
-    { FsModel::rSizeRole, "size"},
-    { FsModel::rLastChangeDateRole, "lastchangedate"},
-    // Служебные роли
-    { FsModel::rObjectPathRole, "objectpath"},
-
-    { Qt::DecorationRole, "imageURL"}
-};
 //-----------------------------------------------------------------------------
 FsModel::FsModel(QObject* inParent) : QAbstractTableModel(inParent)
 {
@@ -29,7 +17,7 @@ FsModel::FsModel(QObject* inParent) : QAbstractTableModel(inParent)
 int FsModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return m_dirContent.count();
+    return m_currentDir.count();
 }
 //-----------------------------------------------------------------------------
 int FsModel::columnCount(const QModelIndex &parent) const
@@ -40,7 +28,17 @@ int FsModel::columnCount(const QModelIndex &parent) const
 //-----------------------------------------------------------------------------
 QHash<int, QByteArray> FsModel::roleNames() const
 {
-    return m_roles;
+    return {
+        // Роли отображения
+        { FsModel::rNameRole, "name"},
+        { FsModel::rTypeRole, "type"},
+        { FsModel::rSizeRole, "size"},
+        { FsModel::rLastChangeDateRole, "lastchangedate"},
+        // Служебные роли
+        { FsModel::rObjectPathRole, "objectpath"},
+
+        { Qt::DecorationRole, "imageURL"}
+    };
 }
 //-----------------------------------------------------------------------------
 QVariant FsModel::data(const QModelIndex &index, int role) const
@@ -53,7 +51,7 @@ QVariant FsModel::data(const QModelIndex &index, int role) const
 
     QVariant Result = QVariant();
 
-    const QFileInfo& ItemInfo = m_dirContent.at(index.row());
+    const QFileInfo& ItemInfo = m_currentDir.entryInfoList().at(index.row());
 
     switch (role)
     {
@@ -72,7 +70,8 @@ QVariant FsModel::data(const QModelIndex &index, int role) const
         } // case Qt::DecorationRole:
 
         default: { Result = QVariant(); break; }
-    }
+    } // switch (role)
+
     return Result;
 }
 //-----------------------------------------------------------------------------
@@ -94,11 +93,9 @@ QVariant FsModel::headerData(int section, Qt::Orientation orientation, int role)
 void FsModel::setDir(const QDir& inDir)
 {
     layoutAboutToBeChanged();
-    m_dirContent = inDir.entryInfoList();
+    m_currentDir = inDir;
     layoutChanged();
 }
-//-----------------------------------------------------------------------------
-
 //-----------------------------------------------------------------------------
 void FsModel::initColumnsText()
 {

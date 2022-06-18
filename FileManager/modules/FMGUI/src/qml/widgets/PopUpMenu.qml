@@ -38,9 +38,11 @@ Menu {
             icon.source: "qrc:/img/copy_past.png"
             icon.color: "transparent"
 
-            onTriggered: { helper.paste(targetObjectPath); }
+            onTriggered: {
+                if (helper.paste(DataSource.path()))
+                    DataSource.setPath(DataSource.path());;
+            }
         }
-
 
         Action {
             id: deleteAction
@@ -49,7 +51,10 @@ Menu {
             icon.source: "qrc:/img/delete.png"
             icon.color: "transparent"
 
-            onTriggered: { helper.remove(targetObjectPath); }
+            onTriggered: {
+                if (helper.remove(targetObjectPath))
+                    DataSource.setPath(DataSource.path());
+            }
         }
     }
 

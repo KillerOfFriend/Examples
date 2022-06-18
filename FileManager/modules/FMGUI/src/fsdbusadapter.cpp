@@ -12,39 +12,55 @@ FsDBusAdapter::FsDBusAdapter(QObject *inParent) :
 
 }
 //-----------------------------------------------------------------------------
-void FsDBusAdapter::copy(const QString &inPath)
+bool FsDBusAdapter::copy(const QString &inPath)
 {
-    auto result = m_qdbusInterface.copyObject(inPath); // Вызываем метод по DBus
-    result.waitForFinished(); // Ожидаем завершения выполнения метода
+    auto response = m_qdbusInterface.copyObject(inPath); // Вызываем метод по DBus
+    response.waitForFinished(); // Ожидаем завершения выполнения метода
 
-    if (!result.isValid() || !result.value()) // В случаи ошибки
-        QMessageBox::warning(nullptr, tr("Error"), result.error().message()); // Выводим соответствующее сообщение
+    bool Result = response.isValid() && response.value();
+
+    if (!Result) // В случаи ошибки
+        QMessageBox::warning(nullptr, tr("Error"), response.error().message()); // Выводим соответствующее сообщение
+
+    return Result;
 }
 //-----------------------------------------------------------------------------
-void FsDBusAdapter::cut(const QString &inPath)
+bool FsDBusAdapter::cut(const QString &inPath)
 {
-    auto result = m_qdbusInterface.cutObject(inPath); // Вызываем метод по DBus
-    result.waitForFinished(); // Ожидаем завершения выполнения метода
+    auto response = m_qdbusInterface.cutObject(inPath); // Вызываем метод по DBus
+    response.waitForFinished(); // Ожидаем завершения выполнения метода
 
-    if (!result.isValid() || !result.value()) // В случаи ошибки
-        QMessageBox::warning(nullptr, tr("Error"), result.error().message()); // Выводим соответствующее сообщение
+    bool Result = response.isValid() && response.value();
+
+    if (!Result) // В случаи ошибки
+        QMessageBox::warning(nullptr, tr("Error"), response.error().message()); // Выводим соответствующее сообщение
+
+    return Result;
 }
 //-----------------------------------------------------------------------------
-void FsDBusAdapter::paste(const QString &inPath)
+bool FsDBusAdapter::paste(const QString &inPath)
 {
-    auto result = m_qdbusInterface.pasteObject(inPath); // Вызываем метод по DBus
-    result.waitForFinished(); // Ожидаем завершения выполнения метода
+    auto response = m_qdbusInterface.pasteObject(inPath); // Вызываем метод по DBus
+    response.waitForFinished(); // Ожидаем завершения выполнения метода
 
-    if (!result.isValid() || !result.value()) // В случаи ошибки
-        QMessageBox::warning(nullptr, tr("Error"), result.error().message()); // Выводим соответствующее сообщение
+    bool Result = response.isValid() && response.value();
+
+    if (!Result) // В случаи ошибки
+        QMessageBox::warning(nullptr, tr("Error"), response.error().message()); // Выводим соответствующее сообщение
+
+    return Result;
 }
 //-----------------------------------------------------------------------------
-void FsDBusAdapter::remove(const QString &inPath)
+bool FsDBusAdapter::remove(const QString &inPath)
 {
-    auto result = m_qdbusInterface.deleteObject(inPath); // Вызываем метод по DBus
-    result.waitForFinished(); // Ожидаем завершения выполнения метода
+    auto response = m_qdbusInterface.deleteObject(inPath); // Вызываем метод по DBus
+    response.waitForFinished(); // Ожидаем завершения выполнения метода
 
-    if (!result.isValid() || !result.value()) // В случаи ошибки
-        QMessageBox::warning(nullptr, tr("Error"), result.error().message()); // Выводим соответствующее сообщение
+    bool Result = response.isValid() && response.value();
+
+    if (!Result) // В случаи ошибки
+        QMessageBox::warning(nullptr, tr("Error"), response.error().message()); // Выводим соответствующее сообщение
+
+    return Result;
 }
 //-----------------------------------------------------------------------------

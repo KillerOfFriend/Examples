@@ -54,9 +54,9 @@ public:
 
 private:
     static std::array<QString, eColumns::cCount> m_columnsText; ///< Текстовые наименования столбцов
-    static const QHash<int, QByteArray> m_roles;                ///< Роли
 
-    QFileInfoList m_dirContent;                                 ///< Содержимое текущей директории
+    //QFileInfoList m_dirContent;                                 ///< Содержимое текущей директории
+    QDir m_currentDir;
 
     ///
     /// \brief initColumnsText - Метод инициализирует текст столбцов

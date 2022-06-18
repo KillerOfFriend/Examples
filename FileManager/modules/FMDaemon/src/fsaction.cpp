@@ -5,6 +5,13 @@
 namespace fs
 {
 //-----------------------------------------------------------------------------
+///
+/// \brief copyDirectory - Функция копирования директории
+/// \param inFrom - Путь к копируемой директории
+/// \param inTo - Путь назначения
+/// \param inRecursive - Флаг, разрешающий рекурсивное копирование
+/// \return Вернёт признак успешности операции
+///
 bool copyDirectory(const QDir& inFrom, const QDir& inTo, const bool inRecursive = true)
 {
     bool Result = true;
@@ -22,17 +29,51 @@ bool copyDirectory(const QDir& inFrom, const QDir& inTo, const bool inRecursive 
                 Result = (inRecursive) ? copyDirectory(objectPath.absoluteFilePath(), inTo.filePath(objectPath.baseName())) : true;
             else
             {
-                QString Dest = inTo.filePath(objectPath.fileName());
-
-                if (QFile::exists(Dest))
-                    QFile::remove(Dest);
-
-                Result = QFile::copy(objectPath.absoluteFilePath(), Dest);
+                QFile::remove(inTo.filePath(objectPath.fileName()));
+                Result = QFile::copy(objectPath.absoluteFilePath(), inTo.filePath(objectPath.fileName()));
             }
 
             if (!Result)
                 break;
         }
+    }
+
+    return Result;
+}
+//-----------------------------------------------------------------------------
+///
+/// \brief moveDirectory - Функция перемещения директории
+/// \param inFrom - Путь к перемещаемой директории
+/// \param inTo - Путь назначения
+/// \return Вернёт признак успешности операции
+///
+bool moveDirectory(const QDir& inFrom, const QDir& inTo)
+{
+    bool Result = true;
+
+    if (!inTo.exists())
+        inTo.mkpath(inTo.path());
+
+    if ( Result = (inFrom.exists() &&
+                   QFileInfo(inFrom.path()).isDir() &&
+                   QFileInfo(inTo.path()).isDir()))
+    {
+        for (const auto& objectPath : inFrom.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot))
+        {
+            if (objectPath.isDir())
+                Result = moveDirectory(objectPath.absoluteFilePath(), inTo.filePath(objectPath.baseName()));
+            else
+            {
+                QFile::remove(inTo.filePath(objectPath.fileName()));
+                Result = QFile::rename(objectPath.absoluteFilePath(), inTo.filePath(objectPath.fileName()));
+            }
+
+            if (!Result)
+                break;
+        }
+
+        if (Result)
+            QDir(inFrom).removeRecursively();
     }
 
     return Result;
@@ -45,15 +86,8 @@ using namespace fs;
 //-----------------------------------------------------------------------------
 // AbstractFsAction
 //-----------------------------------------------------------------------------
-AbstractFsAction::AbstractFsAction() :
-    m_actionType(efsAcrionType::atUnknown),
-    m_objectPath("")
-{
-
-}
-//-----------------------------------------------------------------------------
-AbstractFsAction::AbstractFsAction(const QString &inPath) :
-    m_actionType(efsAcrionType::atUnknown),
+AbstractFsAction::AbstractFsAction(const QString &inPath, const efsAcrionType inActionType) :
+    m_actionType(inActionType),
     m_objectPath(inPath)
 {
 
@@ -66,58 +100,72 @@ bool AbstractFsAction::objectIsValid() const
 //-----------------------------------------------------------------------------
 // CopyFsAction
 //-----------------------------------------------------------------------------
-CopyFsAction::CopyFsAction() : AbstractFsAction()
+CopyFsAction::CopyFsAction(const QString &inPath) : AbstractFsAction(inPath, efsAcrionType::atCopy)
 {
-    m_actionType = efsAcrionType::atCopy;
-}
-//-----------------------------------------------------------------------------
-CopyFsAction::CopyFsAction(const QString &inPath) : AbstractFsAction(inPath)
-{
-    m_actionType = efsAcrionType::atCopy;
+
 }
 //-----------------------------------------------------------------------------
 bool CopyFsAction::execute(const QString& inPath) const
 {
     bool Result = true;
-
+    // кОпируемый объект валиден и путь копирования существует
     if ( Result = (objectIsValid() && QDir().exists(inPath)) )
-        Result = (QFileInfo(m_objectPath).isDir()) ? copyDirectory(m_objectPath, inPath) : QFile::copy(m_objectPath, inPath);
+    {   // Копировать объект самого в себя запрещено (для директорий)
+        if ( Result = !inPath.contains(m_objectPath) )
+        {
+            QFileInfo ObjectInfo(m_objectPath);
+            QString dest = QDir(inPath).filePath(ObjectInfo.fileName());
+
+            // Вставка объекта в ту же директорию, откуда и копироется (До нескольких вставок подряд)
+            if (m_objectPath == dest)
+            {
+                size_t Index = 0;
+                dest = QDir(inPath).filePath(QObject::tr("copy_") + ObjectInfo.fileName());
+
+                while (QDir().exists(dest))
+                {
+                    dest = QDir(inPath).filePath(QObject::tr("copy%1_").arg(Index) + ObjectInfo.fileName());
+                    Index++;
+                }
+            }
+
+            Result = (QFileInfo(m_objectPath).isDir()) ? copyDirectory(m_objectPath, dest) : QFile::copy(m_objectPath, dest);
+        }
+    }
 
     return Result;
 }
 //-----------------------------------------------------------------------------
 // MoveFsAction
 //-----------------------------------------------------------------------------
-MoveFsAction::MoveFsAction() : AbstractFsAction()
+MoveFsAction::MoveFsAction(const QString &inPath) : AbstractFsAction(inPath, efsAcrionType::atMove)
 {
-    m_actionType = efsAcrionType::atMove;
-}
-//-----------------------------------------------------------------------------
-MoveFsAction::MoveFsAction(const QString &inPath) : AbstractFsAction(inPath)
-{
-    m_actionType = efsAcrionType::atMove;
+
 }
 //-----------------------------------------------------------------------------
 bool MoveFsAction::execute(const QString& inPath) const
 {
     bool Result = true;
 
-    if ( Result = (objectIsValid() && !QDir().exists(inPath)) )
-        Result = QDir().rename(m_objectPath, inPath);
+    if ( Result = (objectIsValid() && QDir().exists(inPath)) )
+    {   // Перемещать объект самого в себя запрещено (для директорий)
+        if ( Result = !inPath.contains(m_objectPath) )
+        {
+            QFileInfo ObjectInfo(m_objectPath);
+            QString dest = QDir(inPath).filePath(ObjectInfo.fileName());
+            // Перемещение на предыдущее место игнорируется
+            Result = (m_objectPath == dest) ? true : (QFileInfo(m_objectPath).isDir()) ? moveDirectory(m_objectPath, dest) : QFile::rename(m_objectPath, dest);
+        }
+    }
 
     return Result;
 }
 //-----------------------------------------------------------------------------
 // RemoveFsAction
 //-----------------------------------------------------------------------------
-RemoveFsAction::RemoveFsAction() : AbstractFsAction()
+RemoveFsAction::RemoveFsAction(const QString &inPath) : AbstractFsAction(inPath, efsAcrionType::atRemove)
 {
-    m_actionType = efsAcrionType::atRemove;
-}
-//-----------------------------------------------------------------------------
-RemoveFsAction::RemoveFsAction(const QString &inPath) : AbstractFsAction(inPath)
-{
-    m_actionType = efsAcrionType::atRemove;
+
 }
 //-----------------------------------------------------------------------------
 bool RemoveFsAction::execute(const QString& inPath) const

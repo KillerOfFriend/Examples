@@ -18,7 +18,7 @@ QString DataSource::path() const
 //-----------------------------------------------------------------------------
 void DataSource::setPath(const QString& inPath)
 {
-    if (inPath.isEmpty() || inPath == m_currentDir.path())
+    if (inPath.isEmpty())
         return;
 
     m_currentDir.cd(inPath);

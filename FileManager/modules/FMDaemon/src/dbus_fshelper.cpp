@@ -27,22 +27,24 @@ bool DBusFsHelper::pasteObject(const QString& inPath)
     bool Result = true;
 
     if ( Result = (m_buffAction != nullptr) )
+    {
         Result = m_buffAction->execute(inPath);
+        // Копирование можно провести повторно, перемещение нельзя
+        if (m_buffAction->m_actionType == fs::efsAcrionType::atMove)
+            m_buffAction = nullptr;
+    }
 
-    m_buffAction = nullptr;
     return Result;
 }
 //-----------------------------------------------------------------------------
 bool DBusFsHelper::deleteObject(const QString& inPath)
 {
     bool Result = true;
+    RemoveFsAction RemoveAction(inPath);
 
-    m_buffAction = std::make_unique<RemoveFsAction>(inPath);
+    if (Result = RemoveAction.objectIsValid())
+        Result = RemoveAction.execute();
 
-    if (Result = m_buffAction->objectIsValid())
-        Result = m_buffAction->execute();
-
-    m_buffAction = nullptr;
     return Result;
 }
 //-----------------------------------------------------------------------------
