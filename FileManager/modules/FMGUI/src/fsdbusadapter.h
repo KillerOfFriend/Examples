@@ -58,7 +58,10 @@ public:
     Q_INVOKABLE bool bufferIsEmpty();
 
 private:
+
     OrgFooDbusfilemanagerInterface m_qdbusInterface; ///< Инерфейс DBus
+
+    bool checkCallHelper();
 };
 //-----------------------------------------------------------------------------
 

@@ -1,6 +1,7 @@
 #include "fsdbusadapter.h"
 
 #include <QMessageBox>
+#include <QDBusConnection>
 
 #include "dbus_defines.hpp"
 
@@ -14,6 +15,7 @@ FsDBusAdapter::FsDBusAdapter(QObject *inParent) :
 //-----------------------------------------------------------------------------
 bool FsDBusAdapter::copy(const QString &inPath)
 {
+    checkCallHelper();
     auto response = m_qdbusInterface.copyObject(inPath); // Вызываем метод по DBus
     response.waitForFinished(); // Ожидаем завершения выполнения метода
 
@@ -27,6 +29,7 @@ bool FsDBusAdapter::copy(const QString &inPath)
 //-----------------------------------------------------------------------------
 bool FsDBusAdapter::cut(const QString &inPath)
 {
+    checkCallHelper();
     auto response = m_qdbusInterface.cutObject(inPath); // Вызываем метод по DBus
     response.waitForFinished(); // Ожидаем завершения выполнения метода
 
@@ -40,6 +43,7 @@ bool FsDBusAdapter::cut(const QString &inPath)
 //-----------------------------------------------------------------------------
 bool FsDBusAdapter::paste(const QString &inPath)
 {
+    checkCallHelper();
     auto response = m_qdbusInterface.pasteObject(inPath); // Вызываем метод по DBus
     response.waitForFinished(); // Ожидаем завершения выполнения метода
 
@@ -53,6 +57,7 @@ bool FsDBusAdapter::paste(const QString &inPath)
 //-----------------------------------------------------------------------------
 bool FsDBusAdapter::remove(const QString &inPath)
 {
+    checkCallHelper();
     auto response = m_qdbusInterface.deleteObject(inPath); // Вызываем метод по DBus
     response.waitForFinished(); // Ожидаем завершения выполнения метода
 
@@ -66,9 +71,31 @@ bool FsDBusAdapter::remove(const QString &inPath)
 //-----------------------------------------------------------------------------
 bool FsDBusAdapter::bufferIsEmpty()
 {
+    checkCallHelper();
     auto response = m_qdbusInterface.bufferIsEmpty(); // Вызываем метод по DBus
     response.waitForFinished(); // Ожидаем завершения выполнения метода
 
     return (response.isValid()) ? response.value() : false;
+}
+//-----------------------------------------------------------------------------
+bool FsDBusAdapter::checkCallHelper()
+{
+    bool Result = true;
+
+    if (Result = QDBusConnection::sessionBus().isConnected())
+    {
+        QDBusConnectionInterface* DBusInterface = QDBusConnection::sessionBus().interface();
+        QStringList registedServices = DBusInterface->registeredServiceNames();
+        // Ищим приложение хелпер
+        if(!registedServices.contains(DBUS_SERVICE_NAME))
+        {   // Хелпер не зарегестрирован
+
+            auto response = std::system("nohup " DBUS_SERVICE_INSTALL_PATH "//FMDaemon > /dev/null &"); // Запускаем
+            Q_UNUSED(response)
+            Result = registedServices.contains(DBUS_SERVICE_NAME); // Проверяем что сервис запустился
+        }
+    }
+
+    return Result;
 }
 //-----------------------------------------------------------------------------
