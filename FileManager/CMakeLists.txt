@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
 #====================================================================
 # Инициализируем проект
 #====================================================================
-set(VERSION 1.0.0.0)                                                # Инициализируем версию проекта
-project(FileManager VERSION ${HM_VERSION} LANGUAGES CXX)            # Инициализируем проект
+set(VERSION 1.0.0.0)                                                # Инициализируем версию проект
+project(FileManager VERSION ${VERSION} LANGUAGES CXX)            # Инициализируем проект
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")  # Добавляем путь поиска cmake файлов
 include(InitUtils)                                                  # Подключаем инициализирующие утилиты
@@ -32,12 +32,15 @@ set(CMAKE_AUTOUIC   ON) # Автоматическая обработка UI
 #====================================================================
 # Задаём глобальные параметры корневого файла проекта
 #====================================================================
-set(PROJECT_ROOT_PATH       ${CMAKE_CURRENT_SOURCE_DIR})    # Указываем путь к корневой директории проекта
-set(COMMON_FOLDER_PATH      ${PROJECT_ROOT_PATH}/common)    # Указываем путь к директории общих файлов
+set(PROJECT_ROOT_PATH           ${CMAKE_CURRENT_SOURCE_DIR})        # Указываем путь к корневой директории проекта
+set(COMMON_FOLDER_PATH          ${PROJECT_ROOT_PATH}/common)        # Указываем путь к директории общих файлов
 
-set(DBUS_SERVICE_NAME       "org.foo.dbusfilemanager")      # Указываем имя сервиса DBUS
-set(DBUS_OBJECT_NAME        "dbusfilemanager")              # Указываем имя добъекта DBUS
-set(DBUS_SERVICE_LIFE       30000)                          # Указываем время жизни сервиса в милисекундах
+set(DBUS_SERVICE_NAME           "org.foo.dbusfilemanager")          # Указываем имя сервиса DBUS
+set(DBUS_OBJECT_NAME            "dbusfilemanager")                  # Указываем имя добъекта DBUS
+set(DBUS_SERVICE_LIFE           30000)                              # Указываем время жизни сервиса в милисекундах
+
+set(DBUS_SERVICE_INSTALL_DIR    "test-${PROJECT_NAME}")             # Указывем имя директории развёртывания
+set(DBUS_SERVICE_INSTALL_PATH   "/opt/${DBUS_SERVICE_INSTALL_DIR}") # Указываем абсолютный путь развёртывания сервиса DBUS
 #====================================================================
 
 #====================================================================
@@ -53,4 +56,19 @@ set(EXECUTABLE_OUTPUT_PATH  "${BUILD_PATH}/bin")                                
 # Начинаем сборку проекта
 #====================================================================
 add_subdirectory(modules)                           # Собираем модули
+#====================================================================
+# Настройки упаковки
+#====================================================================
+include(Packing)                                    # Подключаем генератр иснсталяционного пакета
+# Для сборки DEB пакета в отдельном каталоге сборки требуется:
+# 1) Запустить CMake: "cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ../PathTo/Examples/FileManager"
+# 2) Запустить сборку: "cmake --build ."
+# 3) Запустить CPack: "cpack -G DEB"
+#====================================================================
+install(
+    TARGETS FMDaemon FMGUI
+    RUNTIME DESTINATION .
+    DESTINATION .
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+    )
 #====================================================================
