@@ -85,14 +85,14 @@ bool FsDBusAdapter::checkCallHelper()
     if (Result = QDBusConnection::sessionBus().isConnected())
     {
         QDBusConnectionInterface* DBusInterface = QDBusConnection::sessionBus().interface();
-        QStringList registedServices = DBusInterface->registeredServiceNames();
+
         // Ищим приложение хелпер
-        if(!registedServices.contains(DBUS_SERVICE_NAME))
+        if(!DBusInterface->registeredServiceNames().value().contains(DBUS_SERVICE_NAME))
         {   // Хелпер не зарегестрирован
 
             auto response = std::system("nohup " DBUS_SERVICE_INSTALL_PATH "//FMDaemon > /dev/null &"); // Запускаем
             Q_UNUSED(response)
-            Result = registedServices.contains(DBUS_SERVICE_NAME); // Проверяем что сервис запустился
+            Result = DBusInterface->registeredServiceNames().value().contains(DBUS_SERVICE_NAME); // Проверяем что сервис запустился
         }
     }
 

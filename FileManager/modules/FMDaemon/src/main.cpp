@@ -10,29 +10,49 @@
 int main (int argc, char * argv[])
 {
     int Result = EXIT_SUCCESS;
-    QCoreApplication a(argc, argv);
-    fs::DBusFsHelper Helper;
-    // Запускаем таймер "самоуничтожения"
-    QObject::connect(&Helper, &fs::DBusFsHelper::actionDone, &DeathTimer::Instance(), &DeathTimer::restart);
-    // Регистрируем объект
-    if(!QDBusConnection::sessionBus().registerObject(DBUS_OBJECT_NAME, &Helper, QDBusConnection::ExportAllSlots))
+
+    if (!QDBusConnection::sessionBus().isConnected())
     {
-        qCritical() << "Can't register object";
         Result = EXIT_FAILURE;
+        qCritical() << "DBus connection fail!";
     }
     else
     {
-        qDebug() << "Connected to D-bus";
-        // Регистрируем сервис
-        if (!QDBusConnection::sessionBus().registerService(DBUS_SERVICE_NAME))
+        QDBusConnectionInterface* DBusInterface = QDBusConnection::sessionBus().interface();
+
+        if(DBusInterface->registeredServiceNames().value().contains(DBUS_SERVICE_NAME)) // Сервис уже зарегестрирован
         {
-            qCritical() << QDBusConnection::sessionBus().lastError().message();
             Result = EXIT_FAILURE;
+            qCritical() << "Service already started!";
         }
         else
         {
-            qDebug() << "Service start";
-            Result = a.exec();
+            // Инициализируем функционал хелпера
+            fs::DBusFsHelper Helper;
+            // Запускаем таймер "самоуничтожения"
+            QObject::connect(&Helper, &fs::DBusFsHelper::actionDone, &DeathTimer::Instance(), &DeathTimer::restart);
+            // Регистрируем объект
+            if(!QDBusConnection::sessionBus().registerObject(DBUS_OBJECT_NAME, &Helper, QDBusConnection::ExportAllSlots))
+            {
+                Result = EXIT_FAILURE;
+                qCritical() << "Can't register object!";
+            }
+            else
+            {
+                qDebug() << "Connected to D-bus";
+                // Регистрируем сервис
+                if (!QDBusConnection::sessionBus().registerService(DBUS_SERVICE_NAME))
+                {
+                    Result = EXIT_FAILURE;
+                    qCritical() << QDBusConnection::sessionBus().lastError().message();
+                }
+                else
+                {
+                    QCoreApplication a(argc, argv);
+                    qDebug() << "Service started";
+                    Result = a.exec();
+                }
+            }
         }
     }
 
