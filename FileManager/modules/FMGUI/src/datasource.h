@@ -53,10 +53,10 @@ private:
 
 signals:
     ///
-    /// \brief pathChenged - Сигнал об изменении текущего пути
+    /// \brief pathChanged - Сигнал об изменении текущего пути
     /// \param inNewPath - Новое значение текущего пути
     ///
-    void pathChenged(QString inNewPath);
+    void pathChanged(QString inNewPath);
 
 };
 //-----------------------------------------------------------------------------

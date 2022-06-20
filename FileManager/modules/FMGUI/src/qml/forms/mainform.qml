@@ -119,6 +119,6 @@ ApplicationWindow {
 
     Connections {
         target: DataSource
-        onPathChenged: pathEdit.text = inNewPath
+        onPathChanged: pathEdit.text = inNewPath
     }
 }

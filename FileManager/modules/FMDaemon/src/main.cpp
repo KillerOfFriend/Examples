@@ -14,7 +14,7 @@ int main (int argc, char * argv[])
     if (!QDBusConnection::sessionBus().isConnected())
     {
         Result = EXIT_FAILURE;
-        qCritical() << "DBus connection fail!";
+        qCritical() << QObject::tr("DBus connection fail!");
     }
     else
     {
@@ -23,7 +23,7 @@ int main (int argc, char * argv[])
         if(DBusInterface->registeredServiceNames().value().contains(DBUS_SERVICE_NAME)) // Сервис уже зарегестрирован
         {
             Result = EXIT_FAILURE;
-            qCritical() << "Service already started!";
+            qCritical() << QObject::tr("Service already started!");
         }
         else
         {
@@ -35,11 +35,11 @@ int main (int argc, char * argv[])
             if(!QDBusConnection::sessionBus().registerObject(DBUS_OBJECT_NAME, &Helper, QDBusConnection::ExportAllSlots))
             {
                 Result = EXIT_FAILURE;
-                qCritical() << "Can't register object!";
+                qCritical() << QObject::tr("Can't register object!");
             }
             else
             {
-                qDebug() << "Connected to D-bus";
+                qDebug() << QObject::tr("Connected to D-bus");
                 // Регистрируем сервис
                 if (!QDBusConnection::sessionBus().registerService(DBUS_SERVICE_NAME))
                 {
@@ -49,7 +49,7 @@ int main (int argc, char * argv[])
                 else
                 {
                     QCoreApplication a(argc, argv);
-                    qDebug() << "Service started";
+                    qDebug() << QObject::tr("Service started");
                     Result = a.exec();
                 }
             }

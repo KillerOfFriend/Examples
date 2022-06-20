@@ -29,8 +29,9 @@ Item {
                     height: parent.height - objectImage.height
                     anchors.horizontalCenter: parent.horizontalCenter
                     horizontalAlignment: Text.AlignHCenter
+                    //clip: true
+                    maximumLineCount: 2
                     wrapMode: Text.Wrap
-                    //elide: Text.ElideRight
                 }
             }
 

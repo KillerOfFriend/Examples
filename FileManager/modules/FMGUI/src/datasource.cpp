@@ -26,7 +26,7 @@ void DataSource::setPath(const QString& inPath)
     m_currentDir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
     fsModel.setDir(m_currentDir);
 
-    pathChenged(m_currentDir.path());
+    pathChanged(m_currentDir.path());
 }
 //-----------------------------------------------------------------------------
 void DataSource::dirUp()
@@ -37,6 +37,6 @@ void DataSource::dirUp()
     m_currentDir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
     fsModel.setDir(m_currentDir);
 
-    pathChenged(m_currentDir.path());
+    pathChanged(m_currentDir.path());
 }
 //-----------------------------------------------------------------------------
