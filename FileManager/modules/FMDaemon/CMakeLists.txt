@@ -20,6 +20,12 @@ set(LINKED_LIBRARYES
     Qt${QT_VERSION}::DBus
     )
 #====================================================================
+# Генерируем файл запуска DBus сервиса
+configure_file(
+    "${COMMON_FOLDER_PATH}/templates/dbus_service.in"
+    "${EXECUTABLE_OUTPUT_PATH}/${DBUS_SERVICE_NAME}.service"
+    )
+#====================================================================
 # Генерируем файл глобальных объявлений в сборочной директории проекта
 configure_file(
     "${COMMON_FOLDER_PATH}/templates/dbus_defines.hpp.in"

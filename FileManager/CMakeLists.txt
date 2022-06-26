@@ -65,10 +65,13 @@ include(Packing)                                    # Подключаем ге�
 # 2) Запустить сборку: "cmake --build ."
 # 3) Запустить CPack: "cpack -G DEB"
 #====================================================================
+# Инсталляция проектов
 install(
     TARGETS FMDaemon FMGUI
     RUNTIME DESTINATION .
     DESTINATION .
     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
     )
+# Инсталляция дополнительных файлов
+install(FILES "${EXECUTABLE_OUTPUT_PATH}/${DBUS_SERVICE_NAME}.service" DESTINATION /usr/share/dbus-1/services/)
 #====================================================================

@@ -29,8 +29,7 @@ int main (int argc, char * argv[])
         {
             // Инициализируем функционал хелпера
             fs::DBusFsHelper Helper;
-            // Запускаем таймер "самоуничтожения"
-            QObject::connect(&Helper, &fs::DBusFsHelper::actionDone, &DeathTimer::Instance(), &DeathTimer::restart);
+
             // Регистрируем объект
             if(!QDBusConnection::sessionBus().registerObject(DBUS_OBJECT_NAME, &Helper, QDBusConnection::ExportAllSlots))
             {
@@ -50,6 +49,10 @@ int main (int argc, char * argv[])
                 {
                     QCoreApplication a(argc, argv);
                     qDebug() << QObject::tr("Service started");
+
+                    // Запускаем таймер "самоуничтожения"
+                    QObject::connect(&Helper, &fs::DBusFsHelper::actionDone, &DeathTimer::Instance(), &DeathTimer::restart);
+
                     Result = a.exec();
                 }
             }

@@ -61,7 +61,6 @@ private:
 
     OrgFooDbusfilemanagerInterface m_qdbusInterface; ///< Инерфейс DBus
 
-    bool checkCallHelper();
 };
 //-----------------------------------------------------------------------------
 

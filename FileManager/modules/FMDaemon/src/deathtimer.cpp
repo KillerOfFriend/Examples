@@ -5,7 +5,7 @@
 #include "dbus_defines.hpp"
 
 //-----------------------------------------------------------------------------
-DeathTimer::DeathTimer()
+DeathTimer::DeathTimer() : QObject(nullptr), ors::FixedObject()
 {
     connect(&m_timer, &QTimer::timeout, this, &DeathTimer::timeOut);
     restart();
